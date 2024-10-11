@@ -1,1 +1,1 @@
-export const revalidateNum = 86400;
+export const REVALIDATE_NUM = 86400;
