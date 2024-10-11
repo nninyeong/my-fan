@@ -16,6 +16,12 @@ const getFirstDayOfMonth = (date: Date): number => {
   return getDay(startDate);
 };
 
+/**
+ * 캘린더 날짜와 스케쥴의 날짜가 일치하는지 확인
+ * @param calendarDate - 캘린더의 날짜 (date)
+ * @param scheduleDate - 스케쥴의 날짜 ('2024-10-10')
+ * @return 일치 여부
+ */
 const isSameDay = (calendarDate: number, scheduleDate: string): boolean => {
   return +scheduleDate.split('-')[2] === calendarDate;
 };
@@ -23,9 +29,10 @@ const isSameDay = (calendarDate: number, scheduleDate: string): boolean => {
 type CalendarPropType = {
   initialDate: Date;
   initialSchedules: Schedule[];
+  artistId: string;
 };
 
-export default function Calendar({ initialDate, initialSchedules }: CalendarPropType) {
+export default function Calendar({ initialDate, initialSchedules, artistId }: CalendarPropType) {
   const [daysInMonth, setDaysInMonth] = useState<number>(getDaysInMonth(initialDate));
   const [firstDay, setFirstDay] = useState<number>(getFirstDayOfMonth(initialDate));
   const [month, setMonth] = useState<number>(getMonth(initialDate) + 1);
