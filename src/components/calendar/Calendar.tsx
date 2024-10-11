@@ -2,6 +2,7 @@
 
 import { Schedule } from '@/lib/type/scheduleTypes';
 import { getDay, getDaysInMonth, getMonth, startOfMonth } from 'date-fns';
+import { useState } from 'react';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -15,20 +16,25 @@ const getFirstDayOfMonth = (date: Date): number => {
   return getDay(startDate);
 };
 
+const isSameDay = (calendarDate: number, scheduleDate: string): boolean => {
+  return +scheduleDate.split('-')[2] === calendarDate;
+};
+
 type CalendarPropType = {
   initialDate: Date;
   initialSchedules: Schedule[];
 };
 
 export default function Calendar({ initialDate, initialSchedules }: CalendarPropType) {
-  const daysInMonth = getDaysInMonth(initialDate);
-  const firstDay = getFirstDayOfMonth(initialDate);
-  const month = getMonth(initialDate) + 1;
+  const [daysInMonth, setDaysInMonth] = useState<number>(getDaysInMonth(initialDate));
+  const [firstDay, setFirstDay] = useState<number>(getFirstDayOfMonth(initialDate));
+  const [month, setMonth] = useState<number>(getMonth(initialDate) + 1);
+  const [schedules, setSchedules] = useState<Schedule[]>(initialSchedules);
 
   return (
-    <div className='flex flex-col justify-center items-center w-full border'>
+    <div className='flex flex-col justify-center items-center w-full'>
       <h2>{month}월</h2>
-      <div className='grid grid-cols-7 w-full text-center bg-pink-300'>
+      <div className='grid grid-cols-7 w-full text-center'>
         {DAYS.map((day) => {
           return <div>{day}</div>;
         })}
@@ -38,7 +44,28 @@ export default function Calendar({ initialDate, initialSchedules }: CalendarProp
           <div></div>
         ))}
         {Array.from({ length: daysInMonth }, (_, index) => {
-          return <div>{index + 1}</div>;
+          return (
+            <div className='flex flex-col gap-1 overflow-hidden border bg-white hover:cursor-pointer'>
+              <div>{index + 1}</div>
+              <div>
+                {schedules.map((schedule) => {
+                  if (isSameDay(index + 1, schedule.date)) {
+                    return (
+                      <div
+                        key={schedule.id}
+                        className='flex items-center gap-1 text-[12px]'
+                      >
+                        <div className='w-[5px] h-[5px] shrink-0 rounded-full bg-svt-rosequartz'></div>
+                        <div className='overflow-hidden whitespace-nowrap truncate h-[12px] leading-[12px]'>
+                          {schedule.title}
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+              </div>
+            </div>
+          );
         })}
       </div>
     </div>
