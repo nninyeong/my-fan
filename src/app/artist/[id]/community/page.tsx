@@ -14,7 +14,12 @@ export default function CommunityPage() {
   const supabase = createClient();
 
   const getPosts = async () => {
-    const { data } = await supabase.from('posts').select('*').eq('artist_id', 'seventeen').returns<CommunityPost[]>(); //아티스트id 가져와서 넣기
+    const { data } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('artist_id', 'seventeen')
+      .order('created_at', { ascending: false })
+      .returns<CommunityPost[]>(); //TODO - 아티스트id 가져와서 넣기
     setPosts(data || []);
   };
 
