@@ -1,95 +1,25 @@
 import Calendar from '@/components/calendar/Calendar';
 import { Schedule } from '@/lib/type/scheduleTypes';
+import { createClient } from '@/utils/supabase/server';
+import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 
-export default function page({ params }: { params: { id: string } }) {
-  // TODO: 현재 year-month 로 등록돼있는 일정 && artistId === artist_id 컬럼의 값 인 일정만 fetch -> Calendar에 initialSchedules로 전달
-  const today = new Date();
+export default async function page({ params }: { params: { id: string } }) {
   const artistId = params.id;
 
-  // supabase db와 연결 전 임시데이터
-  const initialSchedules: Schedule[] = [
-    {
-      id: 0,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-11',
-      title: '유저1, 앨범 발매 기념 사인회',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 1,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-01',
-      title: '유저1, 10주년 기념 콘서트',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 1,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-01',
-      title: '유저1, 10주년 기념 콘서트',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 1,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-01',
-      title: '유저1, 10주년 기념 콘서트',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 1,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-01',
-      title: '유저1, 10주년 기념 콘서트',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 1,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-01',
-      title: '유저1, 10주년 기념 콘서트',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 1,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-01',
-      title: '유저1, 10주년 기념 콘서트',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 2,
-      artist_id: 1,
-      user_id: 2,
-      date: '2024-10-12',
-      title: '유저2, 대전 빵축제 축하공연',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-    {
-      id: 3,
-      artist_id: 1,
-      user_id: 1,
-      date: '2024-10-11',
-      title: '유저1, 앨범 발매 기념 사인회 2회차',
-      content: 'content 내용',
-      description: 'description내용',
-    },
-  ];
+  const today = new Date();
+  const year = getYear(today);
+  const month = getMonth(today) + 1;
+  const daysInMonth = getDaysInMonth(today);
+  const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  const endDate = `${year}-${String(month).padStart(2, '0')}-${daysInMonth}}`;
+
+  const serverClient = createClient();
+  const { data: initialSchedules, error } = await serverClient
+    .from<Schedule>('schedule')
+    .select()
+    .eq('artist_id', artistId)
+    .gte('date', startDate)
+    .lt('date', endDate);
 
   return (
     <div className='flex justify-center items-center gap-10 w-full mt-14'>
