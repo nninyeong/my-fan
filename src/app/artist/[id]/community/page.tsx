@@ -13,23 +13,16 @@ import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { CommunityPost } from '@/lib/type/CommunityTypes';
 
 // http://localhost:3000/artist/seventeen/community
-type Post = {
-  id: string;
-  created_at: string;
-  user_id: string;
-  title: string;
-  body: string;
-  artist_id: string;
-};
 
 export default function CommunityPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<CommunityPost[]>([]);
   const supabase = createClient();
 
   const getPosts = async () => {
-    const { data } = await supabase.from('posts').select('*').eq('artist_id', 'seventeen').returns<Post[]>(); //아티스트 아이디 가져와서 넣기
+    const { data } = await supabase.from('posts').select('*').eq('artist_id', 'seventeen').returns<CommunityPost[]>(); //아티스트 아이디 가져와서 넣기
     setPosts(data || []);
   };
 
