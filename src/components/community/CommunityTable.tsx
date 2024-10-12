@@ -11,16 +11,25 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
+import { useRouter } from 'next/navigation';
 
 type PostPropType = {
   posts: CommunityPost[];
 };
 
-export default function PostTable({ posts }: PostPropType) {
+export default function CommunityTable({ posts }: PostPropType) {
+  const router = useRouter();
+
+  //글 디테일 페이지로 이동
+  const movePostDetail = (id: string) => {
+    router.push(`/artist/seventeen/community/${id}`);
+  };
+
   return (
     <div>
       <div>
         <Table>
+          {/* TODO - 해당 가수이름 넣기 */}
           <TableCaption>[가수이름] fan들의 공간</TableCaption>
           <TableHeader>
             <TableRow>
@@ -32,7 +41,10 @@ export default function PostTable({ posts }: PostPropType) {
           </TableHeader>
           <TableBody>
             {posts?.map((post) => (
-              <TableRow key={post.id}>
+              <TableRow
+                key={post.id}
+                onClick={() => movePostDetail(post.id)}
+              >
                 <TableCell className='font-medium'></TableCell>
                 <TableCell>{post.user_id}</TableCell>
                 <TableCell>{post.title}</TableCell>
