@@ -4,33 +4,36 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createClient } from '@/utils/supabase/client';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+type PostId = string | null;
 
 export default function PostForm() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  // const [post, setPost] = useState();
+
   const supabase = createClient();
   const router = useRouter();
 
   //URL 해당 글 id
   const params = useSearchParams();
-  const getParams = params.get('postId');
+  const postId: PostId = params.get('postId');
 
   //URL 아티스트 id
   const value = useParams();
   const artistId = value.id;
 
   //해당 글 불러오기
-  // const getPost = async (postId: string) => {
-  //   const { data, error } = await supabase.from('posts').select('*').eq('id', postId).single();
-  //   setPost(data);
+  const getPost = async (postId: PostId) => {
+    const { data, error } = await supabase.from('posts').select('*').eq('id', postId).single();
+    setContent(data.body);
+    setTitle(data.title);
 
-  //   if (error) {
-  //     console.error('Error fetching post:', error.message);
-  //     return;
-  //   }
-  // };
+    if (error) {
+      console.error('게시글 패치 오류', error.message);
+      return;
+    }
+  };
 
   // 글 등록
   const addPost = async () => {
@@ -44,7 +47,7 @@ export default function PostForm() {
     ]);
 
     if (error) {
-      console.error('Error adding todo:', error);
+      console.error('게시글 등록 오류', error);
     } else {
       window.confirm('게시글이 등록되었습니다.');
       router.push(`/artist/${artistId}/community`);
@@ -52,11 +55,19 @@ export default function PostForm() {
   };
 
   //글 수정
+  const handleUpdate = async () => {
+    const { error } = await supabase.from('posts').update({ title, body: content }).eq('id', postId);
+    if (error) {
+      console.error('게시글 수정 오류', error);
+    } else {
+      window.confirm('게시글이 수정되었습니다.');
+      router.push(`/artist/${artistId}/community`);
+    }
+  };
 
-  //
-  // useEffect(()=>{
-  //   getPost();
-  // },[])
+  useEffect(() => {
+    getPost(postId);
+  }, []);
 
   return (
     <>
@@ -66,6 +77,7 @@ export default function PostForm() {
           <Input
             type='text'
             onChange={(e) => setTitle(e.target.value)}
+            value={title}
           />
         </div>
         <div>
@@ -74,18 +86,19 @@ export default function PostForm() {
             name=''
             id=''
             onChange={(e) => setContent(e.target.value)}
+            value={content}
           ></Textarea>
         </div>
         <div>
-          {getParams ? (
+          {postId ? (
             <>
               <Button
                 variant='destructive'
-                onClick={() => router.push(`/artist/${artistId}/community/${getParams}`)}
+                onClick={() => router.push(`/artist/${artistId}/community/${postId}`)}
               >
                 취소
               </Button>
-              <Button>수정</Button>
+              <Button onClick={handleUpdate}>수정</Button>
             </>
           ) : (
             <>
