@@ -8,17 +8,21 @@ import { CommunityPost } from '@/lib/type/CommunityTypes';
 import seventeen from '../../../../../public/images/seventeen.png';
 import Image from 'next/image';
 import CommunityTable from '@/components/community/CommunityTable';
+import { useParams } from 'next/navigation';
 // http://localhost:3000/artist/seventeen/community
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const supabase = createClient();
+  const value = useParams();
+  const artistId = value.id;
 
+  //해당 아티스트 글 가져오기
   const getPosts = async () => {
     const { data } = await supabase
       .from('posts')
       .select('*')
-      .eq('artist_id', 'seventeen') //TODO - 아티스트id 가져와서 넣기
+      .eq('artist_id', artistId)
       .order('created_at', { ascending: false })
       .returns<CommunityPost[]>();
     setPosts(data || []);
@@ -44,7 +48,7 @@ export default function CommunityPage() {
         <div>
           <div className='flex'>
             <h1>전체글</h1>
-            <Link href={'/artist/seventeen/posts'}>
+            <Link href={`/artist/${artistId}/posts`}>
               <Button>글쓰기</Button>
             </Link>
           </div>

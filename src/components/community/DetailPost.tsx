@@ -1,31 +1,20 @@
 'use client';
-
 import { createClient } from '@/utils/supabase/client';
 import { Button } from '../ui/button';
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 
-export default function DetailPost() {
-  const [posts, setPosts] = useState<CommunityPost>({});
+type PostPropType = {
+  posts: CommunityPost;
+  postId: string;
+};
+
+export default function DetailPost({ posts, postId }: PostPropType) {
   const supabase = createClient();
-  const value = useParams();
-  const postId: string = value.postId; //????? 걍 string 인데 뭔말.,..?
   const router = useRouter();
 
-  //해당 글 불러오기
-  const getPosts = async (postId: string) => {
-    const { data, error } = await supabase.from('posts').select('*').eq('id', postId).single();
-    setPosts(data as CommunityPost);
-
-    if (error) {
-      console.error('Error fetching post:', error.message);
-      return;
-    }
-  };
-
-  //삭제
   //TODO - 내가 쓴 글만 삭제해야함
+  // 글 삭제하기
   const handleDelete = async (postId: string) => {
     const confirmed = window.confirm('정말로 이 게시글을 삭제하시겠습니까?');
     if (!confirmed) return;
@@ -42,14 +31,10 @@ export default function DetailPost() {
     router.push(`/artist/${posts.artist_id}/community`);
   };
 
-  //수정 (postForm 컴포넌트로 이동)
+  // 글 수정하기 (postForm 컴포넌트로 이동)
   const handleUpdate = () => {
     router.push(`/artist/${posts.artist_id}/posts?postId=${postId}`);
   };
-
-  useEffect(() => {
-    getPosts(postId);
-  }, []);
 
   return (
     <>
