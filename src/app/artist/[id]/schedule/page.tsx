@@ -2,6 +2,7 @@ import Calendar from '@/components/calendar/Calendar';
 import { Schedule } from '@/lib/type/scheduleTypes';
 import { createClient } from '@/utils/supabase/server';
 import { getDaysInMonth, getMonth, getYear } from 'date-fns';
+import ScheduleList from '@/components/calendar/ScheduleList';
 
 export default async function page({ params }: { params: { id: string } }) {
   const artistId = params.id;
@@ -19,7 +20,8 @@ export default async function page({ params }: { params: { id: string } }) {
     .select()
     .eq('artist_id', artistId)
     .gte('date', startDate)
-    .lt('date', endDate);
+    .lt('date', endDate)
+    .order('date', { ascending: true });
 
   return (
     <div className='flex justify-center items-center gap-10 w-full mt-14'>
@@ -32,7 +34,7 @@ export default async function page({ params }: { params: { id: string } }) {
           artistId={artistId}
         />
       </div>
-      <div className='border w-[300px] h-[600px]'></div>
+      <ScheduleList initialSchedules={initialSchedules} />
     </div>
   );
 }
