@@ -1,9 +1,3 @@
-export type Schedule = {
-  id: string;
-  artist_id: string;
-  user_id: string;
-  date: string;
-  title: string;
-  description: string;
-  content: string;
-};
+import { Database } from '@/lib/type/database.types';
+
+export type Schedule = Database['public']['Tables']['schedule']['Row'];

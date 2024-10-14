@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { Schedule } from '@/lib/type/scheduleTypes';
 
 const getInitialSchedules = async (artistId: string, startDate: string, endDate: string) => {
   const serverClient = createClient();

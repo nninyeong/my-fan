@@ -151,7 +151,7 @@ export type Database = {
       }
       schedule: {
         Row: {
-          artist_id: number
+          artist_id: string
           content: string | null
           date: string
           description: string
@@ -160,7 +160,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          artist_id: number
+          artist_id: string
           content?: string | null
           date: string
           description: string
@@ -169,7 +169,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          artist_id?: number
+          artist_id?: string
           content?: string | null
           date?: string
           description?: string
