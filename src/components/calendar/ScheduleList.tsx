@@ -15,7 +15,7 @@ export default function ScheduleList({ artistId, initialDate }: CalendarInitData
 
   return (
     <div className='border w-[300px] h-[600px] flex flex-col jusfity-start items-center gap-3 p-3'>
-      {schedules &&
+      {schedules && schedules.length > 0 ? (
         schedules.map((schedule: Schedule) => (
           <div
             key={schedule.id}
@@ -25,7 +25,12 @@ export default function ScheduleList({ artistId, initialDate }: CalendarInitData
             <p>{schedule.description}</p>
             <p>{schedule.date}</p>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className='h-full flex flex-col justify-center'>
+          <p>스케줄이 존재하지 않는 날입니다.</p>
+        </div>
+      )}
     </div>
   );
 }
