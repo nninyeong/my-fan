@@ -2,10 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
-  // This `try/catch` block is only here for the interactive tutorial.
-  // Feel free to remove once you have Supabase connected.
+  // 이 `try/catch` 블록은 상호작용 튜토리얼을 위한 것입니다.
+  // Supabase 연결이 완료되면 자유롭게 제거할 수 있습니다.
   try {
-    // Create an unmodified response
+    // 수정되지 않은 응답을 생성합니다.
     let response = NextResponse.next({
       request: {
         headers: request.headers,
@@ -31,15 +31,15 @@ export const updateSession = async (request: NextRequest) => {
       },
     );
 
-    // This will refresh session if expired - required for Server Components
+    // 만료된 세션을 갱신합니다. (서버 컴포넌트에서 필요함)
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     await supabase.auth.getUser();
 
     return response;
   } catch (error) {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
-    // Check out http://localhost:3000 for Next Steps.
+    // 여기로 온 경우, Supabase 클라이언트를 생성하지 못한 것입니다!
+    // 이는 환경 변수가 설정되지 않았기 때문일 가능성이 큽니다.
+    // 다음 단계에 대한 정보를 보려면 http://localhost:3000을 확인하세요.
     return NextResponse.next({
       request: {
         headers: request.headers,

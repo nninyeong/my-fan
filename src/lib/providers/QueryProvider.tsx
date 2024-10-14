@@ -6,9 +6,9 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
-        staleTime: 60 * 1000,
+        // SSR에서는 기본 staleTime을 0 이상으로 설정하여
+        // 클라이언트에서 즉시 refetch하지 않도록 합니다.
+        staleTime: 60 * 1000, // 1분
       },
     },
   });
@@ -18,23 +18,22 @@ let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
   if (isServer) {
-    // Server: always make a new query client
+    // 서버: 항상 새로운 query client를 만듭니다.
     return makeQueryClient();
   } else {
-    // Browser: make a new query client if we don't already have one
-    // This is very important, so we don't re-make a new client if React
-    // suspends during the initial render. This may not be needed if we
-    // have a suspense boundary BELOW the creation of the query client
+    // 브라우저: 이미 query client가 없다면 새로 만듭니다.
+    // 이는 React가 초기 렌더링 중에 suspend할 경우 새로운 클라이언트를 다시
+    // 만들지 않도록 하기 위함입니다. 만약 suspense boundary가 이 코드 아래에 있다면
+    // 이 작업은 필요 없을 수 있습니다.
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
     return browserQueryClient;
   }
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  // NOTE: Avoid useState when initializing the query client if you don't
-  //       have a suspense boundary between this and the code that may
-  //       suspend because React will throw away the client on the initial
-  //       render if it suspends and there is no boundary
+  // NOTE: Query client를 초기화할 때 suspense boundary가 없다면
+  //       useState 사용을 피해야 합니다. 렌더링 중 React가 suspend하고
+  //       boundary가 없을 경우 클라이언트를 버릴 수 있기 때문입니다.
   const queryClient = getQueryClient();
 
   return (
