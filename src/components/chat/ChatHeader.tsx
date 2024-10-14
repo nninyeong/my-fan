@@ -6,9 +6,9 @@ import browserClient from '@/utils/supabase/client';
 
 export default function ChatHeader() {
   const supabase = browserClient;
-  const [isClient, setIsClient] = useState(false);
   const user = useAuthStore((state) => state.user);
-  const [onlineUsers, setOnlineUsers] = useState(0);
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const [onlineUsers, setOnlineUsers] = useState<number>(0);
 
   useEffect(() => {
     setIsClient(true);
@@ -19,7 +19,7 @@ export default function ChatHeader() {
     const channel = supabase.channel('room1');
     channel
       .on('presence', { event: 'sync' }, () => {
-        const userIds = new Set(); // 중복된 아이디 제거
+        const userIds = new Set<string>(); // 중복된 아이디 제거
         for (const id in channel.presenceState()) {
           // @ts-ignore
           userIds.add(channel.presenceState()[id][0].user_id);

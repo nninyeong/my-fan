@@ -13,10 +13,12 @@ export default async function ChatMessages() {
     .range(0, LIMIT_MESSAGE) //NOTE - 메세지 역순
     .order('created_at', { ascending: false });
 
+  const messages = data?.reverse() || [];
+
   return (
     <Suspense fallback={'loading...'}>
       <ListMessages />
-      <InitMessages messages={data?.reverse() || []} />
+      <InitMessages messages={messages} />
     </Suspense>
   );
 }

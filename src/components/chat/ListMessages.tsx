@@ -11,7 +11,7 @@ import { ArrowDown } from 'lucide-react';
 export default function ListMessages() {
   // 스크롤 위치를 추적하는 Ref
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const [userScrolled, setUserScrolled] = useState(false);
+  const [userScrolled, setUserScrolled] = useState<boolean>(false);
 
   const { messages, addMessage, optimisticIds, optimisticDeleteMessage, optimisticUpdateMessage } = useMessage(
     (state) => state,

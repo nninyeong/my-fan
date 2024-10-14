@@ -8,11 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
 export default function ChatInput() {
+  const supabase = browserClient;
   const user = useAuthStore((state) => state.user);
   const addMessage = useMessage((state) => state.addMessage);
   const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
-
-  const supabase = browserClient;
 
   const handleSendMessage = async (text: string) => {
     if (text.trim()) {
@@ -34,7 +33,6 @@ export default function ChatInput() {
 
       // NOTE - 낙관적 업데이트로 메시지를 추가
       addMessage(newMessage as Imessage);
-
       setOptimisticIds(newMessage.id);
 
       const { error } = await supabase.from('messages').insert({ text });
