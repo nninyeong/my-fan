@@ -24,8 +24,7 @@ export default async function page({ params }: { params: { id: string } }) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className='flex justify-center items-center gap-10 w-full mt-14'>
-        <div className='border w-[900px] h-[600px]'>
-          {/*TODO: artist params id로 동적 라우팅된다면 id -> 아티스트 이름을 알 수 있는지 확인 필요, 안된다면 메인에서 넘어올 때 zustand 이용?*/}
+        <div className='border p-5 w-[900px] h-[650px]'>
           <h3>{artistId} 스케쥴</h3>
           <Calendar
             initialDate={today}
