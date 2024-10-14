@@ -1,8 +1,7 @@
 import Calendar from '@/components/calendar/Calendar';
-import { Schedule } from '@/lib/type/scheduleTypes';
-import { createClient } from '@/utils/supabase/server';
 import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import ScheduleList from '@/components/calendar/ScheduleList';
+import getInitialSchedules from '@/queries/getInitialSchedules';
 
 export default async function page({ params }: { params: { id: string } }) {
   const artistId = params.id;
@@ -14,14 +13,7 @@ export default async function page({ params }: { params: { id: string } }) {
   const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
   const endDate = `${year}-${String(month).padStart(2, '0')}-${daysInMonth}}`;
 
-  const serverClient = createClient();
-  const { data: initialSchedules, error } = await serverClient
-    .from<Schedule>('schedule')
-    .select()
-    .eq('artist_id', artistId)
-    .gte('date', startDate)
-    .lt('date', endDate)
-    .order('date', { ascending: true });
+  const initialSchedules = await getInitialSchedules(artistId, startDate, endDate);
 
   return (
     <div className='flex justify-center items-center gap-10 w-full mt-14'>
