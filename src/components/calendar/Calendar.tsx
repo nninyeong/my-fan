@@ -1,8 +1,9 @@
 'use client';
 
-import { Schedule } from '@/lib/type/scheduleTypes';
-import { getDay, getDaysInMonth, getMonth, getYear, startOfMonth } from 'date-fns';
+import { CalendarInitDataType } from '@/lib/type/scheduleTypes';
+import { getDay, getDaysInMonth, startOfMonth } from 'date-fns';
 import { useState } from 'react';
+import { useFetchSchedules } from '@/queries/fetchSchedules';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -26,18 +27,11 @@ const isSameDay = (calendarDate: number, scheduleDate: string): boolean => {
   return +scheduleDate.split('-')[2] === calendarDate;
 };
 
-type CalendarPropType = {
-  initialDate: Date;
-  initialSchedules: Schedule[] | null;
-  artistId: string;
-};
-
-export default function Calendar({ initialDate, initialSchedules, artistId }: CalendarPropType) {
+export default function Calendar({ initialDate, artistId }: CalendarInitDataType) {
   const [daysInMonth, setDaysInMonth] = useState<number>(getDaysInMonth(initialDate));
   const [firstDay, setFirstDay] = useState<number>(getFirstDayOfMonth(initialDate));
-  const [year, setYear] = useState<number>(getYear(initialDate));
-  const [month, setMonth] = useState<number>(getMonth(initialDate) + 1);
-  const [schedules, setSchedules] = useState<Schedule[] | null>(initialSchedules);
+
+  const { data: schedules, year, month } = useFetchSchedules(artistId, initialDate);
 
   return (
     <div className='flex flex-col justify-center items-center w-full'>
