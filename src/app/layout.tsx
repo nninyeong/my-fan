@@ -24,7 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko'>
+    <html
+      lang='ko'
+      suppressHydrationWarning
+    >
       <link
         rel='icon'
         href='/icons/logo-fullname.png'
