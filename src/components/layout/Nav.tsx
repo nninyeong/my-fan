@@ -12,9 +12,10 @@ export default function Nav() {
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
 
-  const { isLogin, setLogin } = useAuthStore((state) => ({
+  const { isLogin, setLogin, setUser } = useAuthStore((state) => ({
     isLogin: state.isLogin,
     setLogin: state.setLogin,
+    setUser: state.setUser,
   }));
 
   const {
@@ -42,21 +43,21 @@ export default function Nav() {
   }, [session, isError, hydrated, setLogin]);
 
   // GitHub 로그인
-  const signInMutation = useMutation({
-    mutationFn: async (): Promise<OAuthResponse> => {
-      return await browserClient.auth.signInWithOAuth({
-        provider: 'github',
-      });
-    },
-    onSuccess: () => {
-      setLogin(true);
-    },
-    onError: (error: Error) => {
-      console.error('로그인 에러:', error);
-    },
-  });
+  // const signInMutation = useMutation({
+  //   mutationFn: async (): Promise<OAuthResponse> => {
+  //     return await browserClient.auth.signInWithOAuth({
+  //       provider: 'github',
+  //     });
+  //   },
+  //   onSuccess: () => {
+  //     setLogin(true);
+  //   },
+  //   onError: (error: Error) => {
+  //     console.error('로그인 에러:', error);
+  //   },
+  // });
 
-  console.log(signInMutation);
+  // console.log(signInMutation);
 
   // 로그아웃
   const signOutMutation = useMutation({
@@ -65,6 +66,7 @@ export default function Nav() {
     },
     onSuccess: () => {
       setLogin(false);
+      setUser(undefined);
       router.refresh();
     },
     onError: (error: Error) => {
@@ -91,7 +93,7 @@ export default function Nav() {
           <Link href={'/artist'}>아티스트</Link>
         </li>
         <li>
-          <Link href={'/chat'}>채팅</Link>
+          <Link href={'/chat'}>팬끼리 모여라 톡</Link>
         </li>
         {!isLogin && (
           <li>

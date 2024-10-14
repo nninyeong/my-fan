@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { create } from 'zustand';
-import { LIMIT_MESSAGE } from '@/lib/constants/constants';
 
 export type Imessage = {
   created_at: string;
@@ -18,23 +17,20 @@ export type Imessage = {
 };
 
 interface MessageState {
-  hasMore: boolean;
-  page: number;
   messages: Imessage[];
   actionMessage: Imessage | undefined; // 메세지 삭제
-  optimisticIds: string[]; // 낙관적 업데이트로 추가된 메시지 ID를 추적하여 중복 구독 처리 방지
+  optimisticIds: string[]; // 낙관적 업데이트로 추가된 메시지 ID를 추적하여 중복 구독 방지
   addMessage: (message: Imessage) => void;
   setActionMessage: (message: Imessage | undefined) => void;
   optimisticDeleteMessage: (messageId: string) => void;
   optimisticUpdateMessage: (message: Imessage) => void;
-  // NOTE - 낙관적 업데이트된 메시지 ID를 추적하여 중복 추가나 중복 업데이트를 방지
+
+  // NOTE - 낙업데이트된 메시지 ID를 추적하여 중복 추가나 중복 업데이트를 방지
   setOptimisticIds: (id: string) => void;
   setMessages: (message: Imessage[]) => void;
 }
 
 export const useMessage = create<MessageState>()((set) => ({
-  hasMore: true,
-  page: 1,
   messages: [],
   optimisticIds: [],
   actionMessage: undefined,
@@ -43,8 +39,6 @@ export const useMessage = create<MessageState>()((set) => ({
   setMessages: (messages) =>
     set((state) => ({
       messages: [...messages, ...state.messages],
-      page: state.page + 1,
-      hasMore: messages.length >= LIMIT_MESSAGE,
     })),
 
   // NOTE - 낙관적 업데이트된 메시지 ID를 추적하여 중복 추가나 중복 업데이트를 방지

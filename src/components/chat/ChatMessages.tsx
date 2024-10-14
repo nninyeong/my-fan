@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
-// import ListMessages from './ListMessages';
-import { createClient } from '@/utils/supabase/server';
+import ListMessages from './ListMessages';
 import InitMessages from '@/lib/stores/InitMessages';
+import { createClient } from '@/utils/supabase/server';
 import { LIMIT_MESSAGE } from '@/lib/constants/constants';
 
 export default async function ChatMessages() {
@@ -10,12 +10,12 @@ export default async function ChatMessages() {
   const { data } = await supabase
     .from('messages')
     .select('*, users(*)')
-    .range(0, LIMIT_MESSAGE) //NOTE - 페이지네이션 가져오는 메서드 0-20
+    .range(0, LIMIT_MESSAGE) //NOTE - 메세지 역순
     .order('created_at', { ascending: false });
 
   return (
     <Suspense fallback={'loading...'}>
-      {/* <ListMessages /> */}
+      <ListMessages />
       <InitMessages messages={data?.reverse() || []} />
     </Suspense>
   );

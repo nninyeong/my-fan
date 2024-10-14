@@ -1,24 +1,21 @@
 'use client';
 
+import { Imessage, useMessage } from '@/lib/stores/useMessagesStore';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
 import browserClient from '@/utils/supabase/client';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
-import { useAuthStore } from '@/lib/stores/useAuthStore'; // useAuthStore를 사용
-import { Imessage, useMessage } from '@/lib/stores/useMessagesStore';
+import { toast } from 'sonner';
 
 export default function ChatInput() {
-  const user = useAuthStore((state) => state.user); // useAuthStore에서 user 가져오기
+  const user = useAuthStore((state) => state.user);
   const addMessage = useMessage((state) => state.addMessage);
   const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
 
   const supabase = browserClient;
 
   const handleSendMessage = async (text: string) => {
-    
     if (text.trim()) {
-      alert(text);
-
       // NOTE - 낙관적 업데이트 삽입
       const newMessage = {
         id: uuidv4(),
@@ -38,7 +35,6 @@ export default function ChatInput() {
       // NOTE - 낙관적 업데이트로 메시지를 추가
       addMessage(newMessage as Imessage);
 
-      // NOTE - 낙관적 업데이트로 중복 업데이트 방지
       setOptimisticIds(newMessage.id);
 
       const { error } = await supabase.from('messages').insert({ text });
@@ -46,14 +42,14 @@ export default function ChatInput() {
         toast.error(error.message);
       }
     } else {
-      toast.error('메세지 빔 ㅅㄱ');
+      toast.error('메세지가 비어있어요');
     }
   };
 
   return (
     <div className='p-5'>
       <Input
-        placeholder='send message'
+        placeholder='함께 대화하세요!'
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             handleSendMessage(e.currentTarget.value);
