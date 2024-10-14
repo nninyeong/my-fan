@@ -1,37 +1,29 @@
 'use client';
 
 import { CalendarInitDataType } from '@/lib/type/scheduleTypes';
-import { getDay, getDaysInMonth, startOfMonth } from 'date-fns';
+import { getDaysInMonth } from 'date-fns';
 import { useState } from 'react';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
+import useScheduleStore from '@/lib/stores/useScheduleStore';
+import { cn } from '@/lib/utils';
+import { getFirstDayOfMonth, isSameDay } from '@/utils/calendar/calendarUtils';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
-
-/**
- * 입력한 날짜가 속한 달(month)이 어떤 요일에 시작하는지 반환
- * @param date - 시작 요일을 알고자하는 Date
- * @return 요일의 index (0: 일요일 ~ 6: 토요일)
- */
-const getFirstDayOfMonth = (date: Date): number => {
-  const startDate = startOfMonth(date);
-  return getDay(startDate);
-};
-
-/**
- * 캘린더 날짜와 스케쥴의 날짜가 일치하는지 확인
- * @param calendarDate - 캘린더의 날짜 (date)
- * @param scheduleDate - 스케쥴의 날짜 ('2024-10-10')
- * @return 일치 여부
- */
-const isSameDay = (calendarDate: number, scheduleDate: string): boolean => {
-  return +scheduleDate.split('-')[2] === calendarDate;
-};
 
 export default function Calendar({ initialDate, artistId }: CalendarInitDataType) {
   const [daysInMonth, setDaysInMonth] = useState<number>(getDaysInMonth(initialDate));
   const [firstDay, setFirstDay] = useState<number>(getFirstDayOfMonth(initialDate));
 
   const { data: schedules, year, month } = useFetchSchedules(artistId, initialDate);
+  const { selectedDate, selectDate } = useScheduleStore();
+
+  const handleToggleDate = (date: number) => {
+    if (selectedDate === date) {
+      selectDate(null);
+    } else {
+      selectDate(date);
+    }
+  };
 
   return (
     <div className='flex flex-col justify-center items-center w-full'>
@@ -51,7 +43,13 @@ export default function Calendar({ initialDate, artistId }: CalendarInitDataType
           return (
             <div
               key={`date-${index}`}
-              className='flex flex-col gap-1 p-1 overflow-hidden border bg-white hover:cursor-pointer'
+              className={cn(
+                'flex flex-col gap-1 p-1 overflow-hidden border bg-white hover:cursor-pointer',
+                selectedDate === index + 1 && 'bg-gray-300',
+              )}
+              onClick={() => {
+                handleToggleDate(index + 1);
+              }}
             >
               <div>{index + 1}</div>
               <div>

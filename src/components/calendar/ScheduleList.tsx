@@ -1,9 +1,17 @@
 'use client';
+
 import { CalendarInitDataType, Schedule } from '@/lib/type/scheduleTypes';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
+import useScheduleStore from '@/lib/stores/useScheduleStore';
+import { isSameDay } from '@/utils/calendar/calendarUtils';
 
 export default function ScheduleList({ artistId, initialDate }: CalendarInitDataType) {
-  const { data: schedules } = useFetchSchedules(artistId, initialDate);
+  let { data: schedules } = useFetchSchedules(artistId, initialDate);
+  const { selectedDate } = useScheduleStore();
+
+  if (selectedDate && schedules) {
+    schedules = schedules.filter((schedule) => isSameDay(selectedDate, schedule.date));
+  }
 
   return (
     <div className='border w-[300px] h-[600px] flex flex-col jusfity-start items-center gap-3 p-3'>
