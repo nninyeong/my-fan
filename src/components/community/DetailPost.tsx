@@ -3,6 +3,8 @@ import { createClient } from '@/utils/supabase/client';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { Label } from '../ui/label';
 
 type PostPropType = {
   posts: CommunityPost;
@@ -38,19 +40,39 @@ export default function DetailPost({ posts, postId }: PostPropType) {
 
   return (
     <>
-      <h1>{posts.title}</h1>
-      <div>
-        <span>{posts.user_id} </span>
-        <span>{posts.created_at}</span>
-      </div>
-      <div>
-        <p>{posts.body}</p>
-      </div>
-      <div>
-        {/* //TODO - 해당 유저가 쓴글일경우 버튼보이게 */}
-        <Button onClick={handleUpdate}>수정</Button>
-        <Button onClick={() => handleDelete(postId)}>삭제</Button>
-      </div>
+      <Card className='w-[700px]'>
+        <CardHeader className='pt-10'>
+          <CardTitle>{posts.title}</CardTitle>
+          <CardDescription>
+            <Label className='mr-2'>{posts.user_id}</Label>
+            {/* <Label>{posts.created_at}</Label> */}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className='rounded-lg border p-4 pb-[100px]'>
+            <div className='grid w-full items-center gap-4'>
+              <div className='flex flex-col space-y-1.5'>
+                <p>{posts.body}</p>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className='flex justify-between'>
+          {/* //TODO - 해당 유저가 쓴글일경우 버튼보이게 */}
+          <Button
+            variant='outline'
+            onClick={handleUpdate}
+          >
+            수정
+          </Button>
+          <Button
+            variant='destructive'
+            onClick={() => handleDelete(postId)}
+          >
+            삭제
+          </Button>
+        </CardFooter>
+      </Card>
     </>
   );
 }

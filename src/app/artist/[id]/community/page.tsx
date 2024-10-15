@@ -33,7 +33,7 @@ export default function CommunityPage() {
   }, []);
 
   return (
-    <div className='flex flex-col jusfity-start items-center'>
+    <div className='flex flex-col justify-start items-center'>
       <div className='mt-[30px] w-[1000px]'>
         <div className='mb-8'>
           {/* //TODO - 임시로 놓은 사진 (해당 가수 사진 가져와야함) */}
@@ -47,7 +47,10 @@ export default function CommunityPage() {
         </div>
         <div>
           <div className='flex justify-between border-solid border-inherit border-b-2 pb-4'>
-            <h1>전체글</h1>
+            <div className='flex'>
+              <h2>전체글 </h2>
+              <h6 className='m-2'>({posts.length})</h6>
+            </div>
             <Link href={`/artist/${artistId}/posts`}>
               <Button>글쓰기</Button>
             </Link>

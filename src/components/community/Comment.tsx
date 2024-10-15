@@ -41,7 +41,7 @@ export default function Comment() {
 
   //해당 아티스트 및 게시글 댓글 불러오기
   const getComments = async (postId: string) => {
-    const { data, error } = await supabase.from('comments').select('*').eq('post_id', postId);
+    const { data, error } = await supabase.from('comments').select('*').eq('post_id', postId).order('created_at');
     setComments(data || []);
 
     if (error) {
@@ -83,7 +83,10 @@ export default function Comment() {
 
   //댓글 수정
   const handleUpdate = async (commentId: string) => {
-    const { error } = await supabase.from('comments').update({ content_text: comment }).eq('id', commentId);
+    const { error } = await supabase
+      .from('comments')
+      .update({ content_text: preUpdateComment, edit_comment: false })
+      .eq('id', commentId);
     if (error) {
       console.error('게시글 수정 오류', error);
     } else {
@@ -95,50 +98,78 @@ export default function Comment() {
     getComments(postId);
   }, []);
   return (
-    <div>
-      <span>댓글</span>
-      <Textarea
-        placeholder='댓글을 입력해주세요.'
-        onChange={(e) => setComment(e.target.value)}
-        value={comment}
-      ></Textarea>
-      <Button onClick={handleCommentInsert}>등록</Button>
-      <ul>
-        {comments.map((comment) => (
-          <li
-            key={comment.id}
-            className='border-2'
-          >
-            <div className='flex gap-4'>
-              {/* //TODO - comment테이블과 유저테이블 조인해서 유저에있는 display_name 가져오기 */}
-              <div>{comment.user_id}</div>
-              {/* 댓글 쓴 유저만 보이게 */}
-              <div>
-                <Button onClick={() => handleEdit(comment)}>수정</Button>
-                <Button onClick={() => handleDeleteComment(comment.id)}>삭제</Button>
-              </div>
-            </div>
-            <div>
-              {comment.edit_comment ? (
-                <div className='flex'>
-                  <Input
-                    type='text'
-                    onChange={(e) => setUpdateComment(e.target.value)}
-                    value={preUpdateComment}
-                  />
-                  <Button onClick={() => handleUpdate(comment.id)}>댓글 수정</Button>
+    <div className='mt-10'>
+      <div className='flex gap-2'>
+        <p className='mb-2'>댓글</p>
+        <p className='mb-2'>({comments.length})</p>
+      </div>
+      <div className='flex gap-2'>
+        <Textarea
+          placeholder='댓글을 입력해주세요.'
+          onChange={(e) => setComment(e.target.value)}
+          value={comment}
+        ></Textarea>
+        <Button
+          onClick={handleCommentInsert}
+          className='my-4 h-[80px]'
+        >
+          등록
+        </Button>
+      </div>
+
+      {comments.length === 0 ? (
+        <div className='mt-8 mb-[100px] text-center'>댓글이 없습니다.</div>
+      ) : (
+        <ul>
+          {comments.map((comment) => (
+            <li
+              key={comment.id}
+              className='border-t-2 pt-4 mt-4 mb-8'
+            >
+              <div className='flex gap-4 justify-between'>
+                {/* //TODO - comment테이블과 유저테이블 조인해서 유저에있는 display_name 가져오기 */}
+                <div>{comment.user_id}</div>
+                {/* //TODO - 댓글 쓴 유저만 버튼 보이게 */}
+                <div>
+                  <Button
+                    variant='outline'
+                    onClick={() => handleEdit(comment)}
+                    className='w-[50px] h-[30px] mr-2'
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    variant='destructive'
+                    onClick={() => handleDeleteComment(comment.id)}
+                    className='w-[50px] h-[30px]'
+                  >
+                    삭제
+                  </Button>
                 </div>
-              ) : (
-                <div>{comment.content_text}</div>
-              )}
-            </div>
-            <div className='flex gap-2'>
-              <p>{comment.created_at}</p>
-              <button>답글 쓰기</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+              </div>
+              <div>
+                {comment.edit_comment ? (
+                  <div className='flex gap-2 mt-2'>
+                    <Input
+                      type='text'
+                      onChange={(e) => setPreUpdateComment(e.target.value)}
+                      value={preUpdateComment}
+                      className='py-2'
+                    />
+                    <Button onClick={() => handleUpdate(comment.id)}>댓글 수정</Button>
+                  </div>
+                ) : (
+                  <div className='pb-4'>{comment.content_text}</div>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <p className='py-2 text-gray-400'>{comment.created_at}</p>
+                {/* <button>답글 쓰기</button> */}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

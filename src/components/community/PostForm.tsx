@@ -6,7 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 import { Label } from '../ui/label';
 
 type PostId = string | null;
@@ -141,49 +141,6 @@ export default function PostForm() {
             )}
           </CardFooter>
         </Card>
-
-        {/* <div>
-          <h4 className='my-2'>제목</h4>
-          <Input
-            type='text'
-            placeholder='제목을 입력해주세요.'
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-            className='mb-4'
-          />
-        </div>
-        <div>
-          <h4 className='my-2'>내용</h4>
-          <Textarea
-            placeholder='내용을 입력해주세요.'
-            onChange={(e) => setContent(e.target.value)}
-            value={content}
-            className='mb-8'
-          ></Textarea>
-        </div>
-        <div className='flex gap-2 justify-end'>
-          {postId ? (
-            <>
-              <Button
-                variant='destructive'
-                onClick={() => router.push(`/artist/${artistId}/community/${postId}`)}
-              >
-                취소
-              </Button>
-              <Button onClick={handleUpdatePost}>수정</Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant='destructive'
-                onClick={() => router.push(`/artist/${artistId}/community`)}
-              >
-                취소
-              </Button>
-              <Button onClick={handleInsertPost}>등록</Button>
-            </>
-          )}
-        </div> */}
       </div>
     </>
   );

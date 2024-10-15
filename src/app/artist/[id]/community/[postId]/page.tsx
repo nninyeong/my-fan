@@ -29,12 +29,14 @@ const PostDetail = () => {
   }, []);
 
   return (
-    <div>
-      <DetailPost
-        posts={posts}
-        postId={postId}
-      />
-      <Comment />
+    <div className='flex flex-col justify-center items-center h-[1100px]'>
+      <div>
+        <DetailPost
+          posts={posts}
+          postId={postId}
+        />
+        <Comment />
+      </div>
     </div>
   );
 };
