@@ -11,6 +11,7 @@ export type Imessage = {
     avatar_url: string;
     created_at: string;
     display_name: string;
+    user_name: string;
     email: string;
     id: string;
   } | null;

@@ -62,17 +62,16 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
     if (isSignUp) {
       const signUpData = formData as SignUpFormData;
       const { email, password, username } = signUpData;
-      const avatar = AVATAR_URL;
-      console.log('회원가입 시 전달할 display_name, email, avatar:', username, email, avatar);
 
+      // Supabase로 회원가입 시도
       const { data, error } = await browserClient.auth.signUp({
         email,
         password,
         options: {
           data: {
-            username: username,
+            username,
             display_name: username,
-            avatar_url: avatar,
+            avatar_url: AVATAR_URL,
           },
         },
       });

@@ -5,14 +5,14 @@ import { Imessage } from '@/lib/stores/useMessagesStore';
 
 export default function Message({ message }: { message: Imessage }) {
   const user = useAuthStore((state) => state.user);
-  const username = user?.user_metadata?.username;
+  const username = message.users?.user_name;
 
   return (
     <div className='flex gap-2'>
       <div className='h-10 w-10 bg-green-500 rounded-full overflow-hidden'>
         <Image
           src={message.users?.avatar_url!}
-          alt={message.users?.display_name || username}
+          alt={message.users?.display_name || username || ''}
           width={40}
           height={40}
           className='rounded-full ring-2'
