@@ -30,7 +30,7 @@ export default function ScheduleList({ artistId, initialDate, userId }: TempCale
           >
             {schedule.user_id === userId && (
               <div className='absolute right-3 top-3 flex gap-1'>
-                <ScheduleEditButton scheduleId={schedule.id} />
+                <ScheduleEditButton schedule={schedule} />
                 <ScheduleDeleteButton scheduleId={schedule.id} />
               </div>
             )}
