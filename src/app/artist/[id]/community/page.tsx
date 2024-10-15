@@ -33,8 +33,8 @@ export default function CommunityPage() {
   }, []);
 
   return (
-    <>
-      <div className='m-[30px] mx-[200px]'>
+    <div className='flex flex-col jusfity-start items-center'>
+      <div className='mt-[30px] w-[1000px]'>
         <div className='mb-8'>
           {/* //TODO - 임시로 놓은 사진 (해당 가수 사진 가져와야함) */}
           <Image
@@ -55,6 +55,6 @@ export default function CommunityPage() {
           <CommunityTable posts={posts} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

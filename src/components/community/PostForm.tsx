@@ -5,6 +5,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { createClient } from '@/utils/supabase/client';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '../ui/label';
 
 type PostId = string | null;
 
@@ -73,25 +76,92 @@ export default function PostForm() {
 
   return (
     <>
-      <div>
-        <div>
-          <span>제목</span>
+      <div className='w-[700px]'>
+        <Card className='p-2 py-4'>
+          <CardHeader className='mb-2'>
+            <CardTitle className='mb-2'>게시글 작성</CardTitle>
+            <CardDescription>My Fan Community Please feel free to enter</CardDescription>
+          </CardHeader>
+          <CardContent className='mb-6'>
+            <form>
+              <div className='grid w-full items-center gap-4'>
+                <div className='flex flex-col space-y-1.5'>
+                  <Label
+                    htmlFor='name'
+                    className='mb-2'
+                  >
+                    제목
+                  </Label>
+                  <Input
+                    type='text'
+                    placeholder='제목을 입력해주세요.'
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title}
+                    className='mb-4'
+                  />
+                </div>
+                <div className='flex flex-col space-y-1.5'>
+                  <Label
+                    htmlFor='framework'
+                    className='mb-2'
+                  >
+                    내용
+                  </Label>
+                  <Textarea
+                    placeholder='내용을 입력해주세요.'
+                    onChange={(e) => setContent(e.target.value)}
+                    value={content}
+                    className='mb-8'
+                  ></Textarea>
+                </div>
+              </div>
+            </form>
+          </CardContent>
+          <CardFooter className='flex justify-between'>
+            {postId ? (
+              <>
+                <Button
+                  variant='outline'
+                  onClick={() => router.push(`/artist/${artistId}/community/${postId}`)}
+                >
+                  취소
+                </Button>
+                <Button onClick={handleUpdatePost}>수정</Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant='outline'
+                  onClick={() => router.push(`/artist/${artistId}/community`)}
+                >
+                  취소
+                </Button>
+                <Button onClick={handleInsertPost}>등록</Button>
+              </>
+            )}
+          </CardFooter>
+        </Card>
+
+        {/* <div>
+          <h4 className='my-2'>제목</h4>
           <Input
             type='text'
             placeholder='제목을 입력해주세요.'
             onChange={(e) => setTitle(e.target.value)}
             value={title}
+            className='mb-4'
           />
         </div>
         <div>
-          <span>내용</span>
+          <h4 className='my-2'>내용</h4>
           <Textarea
             placeholder='내용을 입력해주세요.'
             onChange={(e) => setContent(e.target.value)}
             value={content}
+            className='mb-8'
           ></Textarea>
         </div>
-        <div>
+        <div className='flex gap-2 justify-end'>
           {postId ? (
             <>
               <Button
@@ -113,7 +183,7 @@ export default function PostForm() {
               <Button onClick={handleInsertPost}>등록</Button>
             </>
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );
