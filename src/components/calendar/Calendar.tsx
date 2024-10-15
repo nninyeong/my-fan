@@ -7,6 +7,7 @@ import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { cn } from '@/lib/utils';
 import { getFirstDayOfMonth, isSameDay } from '@/utils/calendar/calendarUtils';
+import AddScheduleButton from '@/components/calendar/AddScheduleButton';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -26,10 +27,13 @@ export default function Calendar({ initialDate, artistId }: CalendarInitDataType
   };
 
   return (
-    <div className='flex flex-col justify-center items-center w-full'>
-      <h2>
-        {year} . {month}
-      </h2>
+    <div className='flex flex-col gap-3 justify-center items-center w-full'>
+      <div className='grid grid-cols-3 w-full'>
+        <h2 className='col-start-2 text-center'>
+          {year} . {month}
+        </h2>
+        <AddScheduleButton artistId={artistId} />
+      </div>
       <div className='grid grid-cols-7 w-full text-center'>
         {DAYS.map((day, index) => {
           return <div key={`${index}day`}>{day}</div>;
@@ -44,7 +48,7 @@ export default function Calendar({ initialDate, artistId }: CalendarInitDataType
             <div
               key={`date-${index}`}
               className={cn(
-                'flex flex-col gap-1 p-1 overflow-hidden border bg-white hover:cursor-pointer',
+                'flex flex-col gap-1 p-1 overflow-hidden bg-white hover:cursor-pointer',
                 selectedDate === index + 1 && 'bg-gray-300',
               )}
               onClick={() => {
