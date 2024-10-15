@@ -4,8 +4,15 @@ import { CalendarInitDataType, Schedule } from '@/lib/type/scheduleTypes';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { isSameDay } from '@/utils/calendar/calendarUtils';
+import ScheduleDeleteButton from '@/components/calendar/ScheduleDeleteButton';
+import ScheduleEditButton from '@/components/calendar/ScheduleEditButton';
 
-export default function ScheduleList({ artistId, initialDate }: CalendarInitDataType) {
+// TODO: 유나님 zustand merge 후 zustand에서 받아오기
+type TempCalendarInitialType = CalendarInitDataType & {
+  userId: string | undefined;
+};
+
+export default function ScheduleList({ artistId, initialDate, userId }: TempCalendarInitialType) {
   let { data: schedules } = useFetchSchedules(artistId, initialDate);
   const { selectedDate } = useScheduleStore();
 
@@ -19,8 +26,14 @@ export default function ScheduleList({ artistId, initialDate }: CalendarInitData
         schedules.map((schedule: Schedule) => (
           <div
             key={schedule.id}
-            className='w-full h-[100px] border p-3'
+            className='relative w-full h-[100px] border p-3'
           >
+            {schedule.user_id === userId && (
+              <div className='absolute right-3 top-3 flex gap-1'>
+                <ScheduleEditButton scheduleId={schedule.id} />
+                <ScheduleDeleteButton scheduleId={schedule.id} />
+              </div>
+            )}
             <h5 className='font-bold'>{schedule.title}</h5>
             <p>{schedule.description}</p>
             <p>{schedule.date}</p>

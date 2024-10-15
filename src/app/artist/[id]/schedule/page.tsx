@@ -43,6 +43,7 @@ export default async function page({ params }: { params: { id: string } }) {
         <ScheduleList
           initialDate={today}
           artistId={artistId}
+          userId={userId}
         />
       </div>
     </HydrationBoundary>
