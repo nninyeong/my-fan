@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Ellipsis } from 'lucide-react';
 
-export default function MessageMenu  ({ message }: { message: Imessage }) {
+export default function MessageMenu({ message }: { message: Imessage }) {
   const setActionMessage = useMessage((state) => state.setActionMessage);
 
   return (
@@ -18,7 +18,7 @@ export default function MessageMenu  ({ message }: { message: Imessage }) {
         <Ellipsis />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Action</DropdownMenuLabel>
+        <DropdownMenuLabel>메세지</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
@@ -26,7 +26,7 @@ export default function MessageMenu  ({ message }: { message: Imessage }) {
             setActionMessage(message);
           }}
         >
-          Edit
+          수정
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
@@ -34,11 +34,9 @@ export default function MessageMenu  ({ message }: { message: Imessage }) {
             setActionMessage(message);
           }}
         >
-          Delete
+          삭제
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
-
-
+}

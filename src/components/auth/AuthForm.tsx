@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
+import { AVATAR_URL } from '@/lib/constants/constants';
 
 // Zod 스키마 타입
 type SignUpFormData = z.infer<typeof signUpSchema>;
@@ -61,7 +62,9 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
     if (isSignUp) {
       const signUpData = formData as SignUpFormData;
       const { email, password, username } = signUpData;
-      console.log('회원가입 시 전달할 display_name:', username, '회원가입 시 전달할 email:', email);
+      const avatar = AVATAR_URL;
+      console.log('회원가입 시 전달할 display_name, email, avatar:', username, email, avatar);
+
       const { data, error } = await browserClient.auth.signUp({
         email,
         password,
@@ -69,6 +72,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
           data: {
             username: username,
             display_name: username,
+            avatar_url: avatar,
           },
         },
       });

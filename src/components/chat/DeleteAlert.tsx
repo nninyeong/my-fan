@@ -45,8 +45,8 @@ export default function DeleteAlert() {
           <AlertDialogDescription>메세지를 정말로 삭제하시겠습니까?</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDeleteMessage}>Continue</AlertDialogAction>
+          <AlertDialogCancel>취소</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDeleteMessage}>삭제</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

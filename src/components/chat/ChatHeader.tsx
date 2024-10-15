@@ -6,8 +6,8 @@ import browserClient from '@/utils/supabase/client';
 
 export default function ChatHeader() {
   const supabase = browserClient;
-  const [isClient, setIsClient] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const [isClient, setIsClient] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState(0);
 
   useEffect(() => {

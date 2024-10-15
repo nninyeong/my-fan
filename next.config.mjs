@@ -7,6 +7,7 @@ const nextConfig = {
         protocol: 'https',
       },
     ],
+    domains: ['zjzxtdplbzlpmnvdrlbu.supabase.co'],
   },
 };
 

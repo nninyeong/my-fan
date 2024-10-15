@@ -23,7 +23,7 @@ export default function Message({ message }: { message: Imessage }) {
           <div className='flex items-center gap-1'>
             <h1 className='font-bold text-base'>{message.users?.display_name}</h1>
             <h1 className='text-sm text-gray-500'>{new Date(message.created_at).toDateString()}</h1>
-            {message.is_edit && <h1 className='text-sm text-gray-400'>수정됬음</h1>}
+            {message.is_edit && <h1 className='text-sm text-gray-400'>수정 완료</h1>}
           </div>
 
           {message.users?.id === user?.id && <MessageMenu message={message} />}

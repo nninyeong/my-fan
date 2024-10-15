@@ -19,12 +19,7 @@ export default function EditAlert() {
 
     if (text) {
       // NOTE - 메세지 업데이트
-      optimisticUpdateMessage({
-        ...actionMessage,
-        text,
-        is_edit: true,
-      } as Imessage);
-
+      optimisticUpdateMessage({ ...actionMessage, text, is_edit: true } as Imessage);
       const { error } = await supabase.from('messages').update({ text, is_edit: true }).eq('id', actionMessage?.id!);
 
       if (error) {
@@ -49,7 +44,7 @@ export default function EditAlert() {
       </DialogTrigger>
       <DialogContent className='w-full'>
         <DialogHeader>
-          <DialogTitle>글 수정하기</DialogTitle>
+          <DialogTitle>수정하기</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <Input
@@ -62,7 +57,7 @@ export default function EditAlert() {
             type='submit'
             onClick={handleEdit}
           >
-            Save changes
+            저장하기
           </Button>
         </DialogFooter>
       </DialogContent>
