@@ -70,3 +70,26 @@ export const useMutateSchedule = () => {
     },
   });
 };
+
+const deleteSchedule = async (scheduleId: string): Promise<Schedule> => {
+  const client = createClient();
+
+  const { data, error } = await client.from('schedule').delete().eq('id', scheduleId).select().single();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+export const useDeleteSchedule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteSchedule,
+    onSuccess: (data: Schedule) => {
+      queryClient.invalidateQueries({
+        queryKey: ['schedules', data.artist_id],
+      });
+    },
+  });
+};
