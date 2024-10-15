@@ -8,6 +8,7 @@ import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { cn } from '@/lib/utils';
 import { getFirstDayOfMonth, isSameDay } from '@/utils/calendar/calendarUtils';
 import AddScheduleButton from '@/components/calendar/AddScheduleButton';
+import CalendarControllBotton from '@/components/calendar/CalendarControllBotton';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -17,10 +18,11 @@ type TempClanedarInitType = CalendarInitDataType & {
 };
 
 export default function Calendar({ initialDate, artistId, userId }: TempClanedarInitType) {
-  const [daysInMonth, setDaysInMonth] = useState<number>(getDaysInMonth(initialDate));
-  const [firstDay, setFirstDay] = useState<number>(getFirstDayOfMonth(initialDate));
+  const [calendarDate, setCalendarDate] = useState<Date>(initialDate);
+  const daysInMonth = getDaysInMonth(calendarDate);
+  const firstDay = getFirstDayOfMonth(calendarDate);
 
-  const { data: schedules, year, month } = useFetchSchedules(artistId, initialDate);
+  const { data: schedules, year, month } = useFetchSchedules(artistId, calendarDate);
   const { selectedDate, selectDate } = useScheduleStore();
 
   const handleToggleDate = (date: number) => {
@@ -33,10 +35,22 @@ export default function Calendar({ initialDate, artistId, userId }: TempClanedar
 
   return (
     <div className='flex flex-col gap-3 justify-center items-center w-full'>
-      <div className='grid grid-cols-3 w-full'>
-        <h2 className='col-start-2 text-center'>
-          {year} . {month}
-        </h2>
+      <div className='grid grid-cols-5 w-full'>
+        <div className='col-start-2 col-end-5 flex gap-3 justify-center items-center'>
+          <CalendarControllBotton
+            mode='previous'
+            calendarDate={calendarDate}
+            setCalendarDate={setCalendarDate}
+          />
+          <h2 className='text-center'>
+            {year} . {month}
+          </h2>
+          <CalendarControllBotton
+            mode='next'
+            calendarDate={calendarDate}
+            setCalendarDate={setCalendarDate}
+          />
+        </div>
         <AddScheduleButton
           artistId={artistId}
           userId={userId}

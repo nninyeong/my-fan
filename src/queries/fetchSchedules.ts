@@ -24,18 +24,19 @@ export const fetchSchedules = async (artistId: string, year: number, month: numb
   return schedules;
 };
 
-export const useFetchSchedules = (artistId: string, initialDate: Date) => {
-  const [year, setYear] = useState<number>(getYear(initialDate));
-  const [month, setMonth] = useState<number>(getMonth(initialDate) + 1);
+export const useFetchSchedules = (artistId: string, calendarDate: Date) => {
+  const year = getYear(calendarDate);
+  const month = getMonth(calendarDate) + 1;
 
   const { data } = useQuery({
-    queryKey: ['schedules', artistId],
+    queryKey: ['schedules', artistId, year, month],
     queryFn: async () => {
       return await fetchSchedules(artistId, year, month);
     },
+    refetchOnMount: true,
   });
 
-  return { data, year, month, setYear, setMonth };
+  return { data, year, month };
 };
 
 const insertSchedule = async (input: ScheduleInsert): Promise<Schedule> => {

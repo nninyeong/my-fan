@@ -17,7 +17,7 @@ export default async function page({ params }: { params: { id: string } }) {
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['schedules', artistId],
+    queryKey: ['schedules', artistId, year, month],
     queryFn: () => getInitialSchedules(artistId, startDate, endDate),
   });
 

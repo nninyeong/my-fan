@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { useMutateSchedule } from '@/queries/fetchSchedules';
 import { format } from 'date-fns';
+import { Plus } from 'lucide-react';
 
 // TODO: zustand userId 세팅 머지 후 artistId만 받아오기
 export default function AddScheduleButton({ artistId, userId }: { artistId: string; userId: string | undefined }) {
@@ -69,7 +70,13 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
     >
       <div className='flex justify-end mr-5'>
         <DialogTrigger asChild>
-          <Button className='w-[150px]'>스케줄 추가하기</Button>
+          <Button
+            className='w-[40px] h-[40px]'
+            variant='default'
+            size='icon'
+          >
+            <Plus strokeWidth='2px' />
+          </Button>
         </DialogTrigger>
       </div>
       <DialogContent>
