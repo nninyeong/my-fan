@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { /*OAuthResponse,*/ Session } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import browserClient from '@/utils/supabase/client';
@@ -42,23 +42,6 @@ export default function Nav() {
     }
   }, [session, isError, hydrated, setLogin]);
 
-  // GitHub 로그인
-  // const signInMutation = useMutation({
-  //   mutationFn: async (): Promise<OAuthResponse> => {
-  //     return await browserClient.auth.signInWithOAuth({
-  //       provider: 'github',
-  //     });
-  //   },
-  //   onSuccess: () => {
-  //     setLogin(true);
-  //   },
-  //   onError: (error: Error) => {
-  //     console.error('로그인 에러:', error);
-  //   },
-  // });
-
-  // console.log(signInMutation);
-
   // 로그아웃
   const signOutMutation = useMutation({
     mutationFn: async () => {
@@ -75,7 +58,6 @@ export default function Nav() {
   });
 
   if (!hydrated || isLoading) {
-    // 로딩 중일 때 플레이스홀더
     return (
       <nav>
         <ul className='flex items-center gap-4'>
@@ -95,12 +77,6 @@ export default function Nav() {
         <li>
           <Link href={'/chat'}>팬끼리 모여라 톡</Link>
         </li>
-        {!isLogin && (
-          <li>
-            <Link href={'/login'}>로그인</Link>
-          </li>
-        )}
-
         {isLogin ? (
           <>
             <li>
@@ -123,6 +99,7 @@ export default function Nav() {
             <li>
               <Link href={'/signUp'}>회원가입</Link>
             </li>
+
             <li>
               <Link href={'/signIn'}>로그인</Link>
             </li>

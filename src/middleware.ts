@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server';
+// import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { updateSession } from './utils/supabase/middleware';
-import { createClient, getIsLogin } from './utils/supabase/server';
+// import { createClient, getIsLogin } from './utils/supabase/server';
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.includes('/schedule')) {
-    const isLogin = await getIsLogin();
+  // if (request.nextUrl.pathname.includes('/schedule')) {
+  //   const isLogin = await getIsLogin();
 
-    if (!isLogin) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-  }
+  //   if (!isLogin) {
+  //     return NextResponse.redirect(new URL('/login', request.url));
+  //   }
+  // }
 
   await updateSession(request);
 }

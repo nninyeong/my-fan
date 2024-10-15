@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import AuthForm from '@/components/shared/AuthForm';
+import AuthForm from '@/components/auth/AuthForm';
 
 export default function page() {
   return (
@@ -9,7 +9,7 @@ export default function page() {
       <AuthForm isSignUp={false} />
 
       <div className='mt-4 text-center text-sm'>
-        Already have an account?{' '}
+        Would you like to sign up?{' '}
         <Link
           href='/signUp'
           className='underline'

@@ -4,18 +4,21 @@ import { z } from 'zod';
 import { useEffect } from 'react';
 import { Github } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import browserClient from '@/utils/supabase/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { toast } from 'sonner';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
 
-// Zod 스키마로부터 타입 추출
+// Zod 스키마 타입
 type SignUpFormData = z.infer<typeof signUpSchema>;
 type LoginFormData = z.infer<typeof loginSchema>;
 
-// Zod 스키마 정의
+// Zod 스키마
 const signUpSchema = z
   .object({
     email: z.string().email('유효한 이메일 주소를 입력하세요.'),
@@ -36,7 +39,11 @@ const loginSchema = z.object({
 });
 
 export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
-  // useForm 훅을 사용해 form 객체 생성
+  const setLogin = useAuthStore((state) => state.setLogin);
+  const setUser = useAuthStore((state) => state.setUser);
+  const router = useRouter();
+
+  // useForm 훅 form 객체 생성
   const form = useForm({
     resolver: zodResolver(isSignUp ? signUpSchema : loginSchema),
     defaultValues: {
@@ -47,11 +54,56 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
     },
   });
 
-  // 폼 제출 함수 정의
-  const onSubmit = (data: SignUpFormData | LoginFormData) => {
-    console.log('data:', data);
+  // 회원가입/ 로그인 로직
+  const onSubmit = async (formData: SignUpFormData | LoginFormData) => {
+    console.log('formData:', formData);
+
+    if (isSignUp) {
+      const signUpData = formData as SignUpFormData;
+      const { email, password, username } = signUpData;
+      console.log('회원가입 시 전달할 display_name:', username, '회원가입 시 전달할 email:', email);
+      const { data, error } = await browserClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username: username,
+            display_name: username,
+          },
+        },
+      });
+
+      if (error) {
+        console.error('회원가입 오류:', error.message);
+        toast.error(error.message);
+      } else {
+        console.log('회원가입 성공:', data);
+        toast.success('회원가입 성공');
+        router.push('/signIn');
+      }
+    } else {
+      const { email, password } = formData as LoginFormData;
+      const { data, error } = await browserClient.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.error('로그인 오류:', error.message);
+        toast.error(error.message);
+      } else {
+        toast.success('로그인 성공');
+        setLogin(true);
+        router.push('/');
+
+        if (data.user) {
+          setUser(data.user);
+        }
+      }
+    }
   };
 
+  // github 로그인 로직
   async function signInWithGithub() {
     await browserClient.auth.signInWithOAuth({
       provider: 'github',
@@ -76,6 +128,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
         <CardContent>
           <Form {...form}>
             <form
+              method='POST'
               onSubmit={form.handleSubmit(onSubmit)}
               className='space-y-8'
             >
@@ -107,7 +160,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder='email@email.com'
+                          placeholder='이메일'
                           {...field}
                         />
                       </FormControl>
@@ -133,6 +186,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
                     </FormItem>
                   )}
                 />
+
                 {isSignUp && (
                   <FormField
                     control={form.control}
@@ -143,7 +197,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
                         <FormControl>
                           <Input
                             placeholder='비밀번호 재입력'
-                            type='passwordCheck'
+                            type='password'
                             {...field}
                           />
                         </FormControl>
@@ -181,7 +235,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
             onClick={signInWithGithub}
           >
             <Github size={18} />
-            Sign up with GitHub
+            {isSignUp ? 'Sign up with GitHub' : 'Sign in with GitHub'}
           </Button>
         </CardFooter>
       </Card>

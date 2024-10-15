@@ -18,7 +18,7 @@ export type Imessage = {
 
 interface MessageState {
   messages: Imessage[];
-  actionMessage: Imessage | undefined; // 메세지 삭제
+  actionMessage: Imessage | undefined;
   optimisticIds: string[]; // 낙관적 업데이트로 추가된 메시지 ID를 추적하여 중복 구독 방지
   addMessage: (message: Imessage) => void;
   setActionMessage: (message: Imessage | undefined) => void;

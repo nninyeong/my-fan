@@ -1,14 +1,6 @@
-import { Imessage, useMessage } from '@/lib/stores/useMessagesStore';
+import { Imessage } from '@/lib/stores/useMessagesStore';
 import Image from 'next/image';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Ellipsis } from 'lucide-react';
+import MessageMenu from './MessageMenu';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 
 export default function Message({ message }: { message: Imessage }) {
@@ -42,35 +34,3 @@ export default function Message({ message }: { message: Imessage }) {
     </div>
   );
 }
-
-const MessageMenu = ({ message }: { message: Imessage }) => {
-  const setActionMessage = useMessage((state) => state.setActionMessage);
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Ellipsis />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Action</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => {
-            document.getElementById('trigger-edit')?.click();
-            setActionMessage(message);
-          }}
-        >
-          Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            document.getElementById('trigger-delete')?.click();
-            setActionMessage(message);
-          }}
-        >
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
