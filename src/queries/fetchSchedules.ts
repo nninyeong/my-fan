@@ -2,7 +2,7 @@ import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Schedule, ScheduleInsert } from '@/lib/type/scheduleTypes';
+import { Schedule, ScheduleInsert, ScheduleUpdate } from '@/lib/type/scheduleTypes';
 
 export const fetchSchedules = async (artistId: string, year: number, month: number) => {
   const client = createClient();
@@ -86,6 +86,30 @@ export const useDeleteSchedule = () => {
 
   return useMutation({
     mutationFn: deleteSchedule,
+    onSuccess: (data: Schedule) => {
+      queryClient.invalidateQueries({
+        queryKey: ['schedules', data.artist_id],
+      });
+    },
+  });
+};
+
+const updateSchedule = async (updateData: ScheduleUpdate & { scheduleId: string }): Promise<Schedule> => {
+  const client = createClient();
+  const { scheduleId, ...input } = updateData;
+
+  const { data, error } = await client.from('schedule').update(input).eq('id', scheduleId).select().single();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+export const useUpdateSchedule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateSchedule,
     onSuccess: (data: Schedule) => {
       queryClient.invalidateQueries({
         queryKey: ['schedules', data.artist_id],
