@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { OAuthResponse, Session } from '@supabase/supabase-js';
+import { /*OAuthResponse,*/ Session } from '@supabase/supabase-js';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import browserClient from '@/utils/supabase/client';
@@ -121,10 +121,10 @@ export default function Nav() {
         ) : (
           <>
             <li>
-              <Link href={'/signup'}>회원가입</Link>
+              <Link href={'/signUp'}>회원가입</Link>
             </li>
             <li>
-              <Link href={'/signIn'}>Gitbub</Link>
+              <Link href={'/signIn'}>로그인</Link>
             </li>
           </>
         )}

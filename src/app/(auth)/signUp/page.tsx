@@ -6,15 +6,15 @@ import AuthForm from '@/components/shared/AuthForm';
 export default function page() {
   return (
     <div className='flex flex-col items-center mt-24 justify-center'>
-      <AuthForm isSignUp={false} />
+      <AuthForm isSignUp={true} />
 
       <div className='mt-4 text-center text-sm'>
         Already have an account?{' '}
         <Link
-          href='/signUp'
+          href='/signIn'
           className='underline'
         >
-          Sign Up
+          Sign in
         </Link>
       </div>
     </div>
