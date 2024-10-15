@@ -36,13 +36,13 @@ export default function PostForm() {
   };
 
   // 글 등록
-  const addPost = async () => {
+  const handleInsertPost = async () => {
     const { error } = await supabase.from('posts').insert([
       {
         title,
         body: content,
         artist_id: artistId,
-        user_id: 'heerok', //TODO - 유저정보 가져와서 넣기
+        user_id: '3f4934ee-6936-4ef8-9afb-7bcf8ef43f64', //TODO - 유저정보 가져와서 넣기
       },
     ]);
 
@@ -55,7 +55,7 @@ export default function PostForm() {
   };
 
   //글 수정
-  const handleUpdate = async () => {
+  const handleUpdatePost = async () => {
     const { error } = await supabase.from('posts').update({ title, body: content }).eq('id', postId);
     if (error) {
       console.error('게시글 수정 오류', error);
@@ -76,6 +76,7 @@ export default function PostForm() {
           <span>제목</span>
           <Input
             type='text'
+            placeholder='제목을 입력해주세요.'
             onChange={(e) => setTitle(e.target.value)}
             value={title}
           />
@@ -83,8 +84,7 @@ export default function PostForm() {
         <div>
           <span>내용</span>
           <Textarea
-            name=''
-            id=''
+            placeholder='내용을 입력해주세요.'
             onChange={(e) => setContent(e.target.value)}
             value={content}
           ></Textarea>
@@ -98,7 +98,7 @@ export default function PostForm() {
               >
                 취소
               </Button>
-              <Button onClick={handleUpdate}>수정</Button>
+              <Button onClick={handleUpdatePost}>수정</Button>
             </>
           ) : (
             <>
@@ -108,7 +108,7 @@ export default function PostForm() {
               >
                 취소
               </Button>
-              <Button onClick={addPost}>등록</Button>
+              <Button onClick={handleInsertPost}>등록</Button>
             </>
           )}
         </div>

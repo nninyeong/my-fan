@@ -9,7 +9,7 @@ import seventeen from '../../../../../public/images/seventeen.png';
 import Image from 'next/image';
 import CommunityTable from '@/components/community/CommunityTable';
 import { useParams } from 'next/navigation';
-// http://localhost:3000/artist/seventeen/community
+// http://localhost:3000/artist/2/community
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
