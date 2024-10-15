@@ -12,10 +12,11 @@ export default function Nav() {
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
 
-  const { isLogin, setLogin, setUser } = useAuthStore((state) => ({
+  const { isLogin, setLogin, user, setUser } = useAuthStore((state) => ({
     isLogin: state.isLogin,
     setLogin: state.setLogin,
     setUser: state.setUser,
+    user: state.user,
   }));
 
   const {
@@ -93,6 +94,11 @@ export default function Nav() {
                 로그아웃
               </Link>
             </li>
+            {isLogin && (
+              <li className='underline'>
+                <span className='font-semibold'>{user?.user_metadata?.display_name || user?.email || '사용자'}</span> 님
+              </li>
+            )}
           </>
         ) : (
           <>
