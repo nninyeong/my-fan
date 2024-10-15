@@ -34,8 +34,8 @@ export default function CommunityPage() {
 
   return (
     <>
-      <div>
-        <div className='m-[10px] border-solid border-inherit border-b-2'>
+      <div className='m-[30px] mx-[200px]'>
+        <div className='mb-8'>
           {/* //TODO - 임시로 놓은 사진 (해당 가수 사진 가져와야함) */}
           <Image
             alt='seventeen'
@@ -46,7 +46,7 @@ export default function CommunityPage() {
           />
         </div>
         <div>
-          <div className='flex'>
+          <div className='flex justify-between border-solid border-inherit border-b-2 pb-4'>
             <h1>전체글</h1>
             <Link href={`/artist/${artistId}/posts`}>
               <Button>글쓰기</Button>

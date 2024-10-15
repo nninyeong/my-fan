@@ -66,7 +66,9 @@ export default function PostForm() {
   };
 
   useEffect(() => {
-    getPost(postId);
+    if (postId !== null) {
+      getPost(postId);
+    }
   }, []);
 
   return (
