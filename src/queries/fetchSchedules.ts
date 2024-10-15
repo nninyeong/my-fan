@@ -1,7 +1,8 @@
 import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import { createClient } from '@/utils/supabase/client';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { Schedule, ScheduleInsert } from '@/lib/type/scheduleTypes';
 
 export const fetchSchedules = async (artistId: string, year: number, month: number) => {
   const client = createClient();
@@ -35,4 +36,37 @@ export const useFetchSchedules = (artistId: string, initialDate: Date) => {
   });
 
   return { data, year, month, setYear, setMonth };
+};
+
+const insertSchedule = async (input: ScheduleInsert): Promise<Schedule> => {
+  const client = createClient();
+
+  const { data, error } = await client
+    .from('schedule')
+    .insert({
+      title: input.title,
+      date: input.date,
+      description: input.description,
+      content: input.content || null,
+      artist_id: input.artist_id,
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+export const useMutateSchedule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: insertSchedule,
+    onSuccess: (data: Schedule) => {
+      queryClient.invalidateQueries({
+        queryKey: ['schedules', data.artist_id],
+      });
+    },
+  });
 };
