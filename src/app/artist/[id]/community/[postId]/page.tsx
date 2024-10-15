@@ -7,7 +7,14 @@ import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const PostDetail = () => {
-  const [posts, setPosts] = useState<CommunityPost>({});
+  const [posts, setPosts] = useState<CommunityPost>({
+    id: '',
+    created_at: '',
+    user_id: '',
+    title: '',
+    body: '',
+    artist_id: '',
+  });
   const supabase = createClient();
 
   const value = useParams<{ postId: string }>(); //!!!
@@ -29,7 +36,7 @@ const PostDetail = () => {
   }, []);
 
   return (
-    <div className='flex flex-col justify-center items-center h-[1100px]'>
+    <div className='flex flex-col justify-center items-center'>
       <div>
         <DetailPost
           posts={posts}

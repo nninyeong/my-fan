@@ -11,7 +11,6 @@ export default function Comment() {
   const supabase = createClient();
   const [comments, setComments] = useState<Comments[]>([]);
   const [comment, setComment] = useState('');
-  const [updateComment, setUpdateComment] = useState('');
   const [preUpdateComment, setPreUpdateComment] = useState('');
 
   //아티스트, 글 id
@@ -90,6 +89,13 @@ export default function Comment() {
     if (error) {
       console.error('게시글 수정 오류', error);
     } else {
+      //바로 화면에 업데이트
+      setComments((prev) =>
+        prev.map((comment) =>
+          comment.id === commentId ? { ...comment, content_text: preUpdateComment, edit_comment: false } : comment,
+        ),
+      );
+
       window.confirm('댓글이 수정되었습니다.');
     }
   };

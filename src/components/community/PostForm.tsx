@@ -28,7 +28,7 @@ export default function PostForm() {
 
   //해당 글 불러오기
   const getPost = async (postId: PostId) => {
-    const { data, error } = await supabase.from('posts').select('*').eq('id', postId).single();
+    const { data, error } = await supabase.from('posts').select('*').eq('id', postId!).single();
     setContent(data.body);
     setTitle(data.title);
 
@@ -59,7 +59,7 @@ export default function PostForm() {
 
   //글 수정
   const handleUpdatePost = async () => {
-    const { error } = await supabase.from('posts').update({ title, body: content }).eq('id', postId);
+    const { error } = await supabase.from('posts').update({ title, body: content }).eq('id', postId!);
     if (error) {
       console.error('게시글 수정 오류', error);
     } else {
