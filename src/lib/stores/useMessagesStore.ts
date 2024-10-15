@@ -1,21 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { create } from 'zustand';
-
-export type Imessage = {
-  created_at: string;
-  id: string;
-  is_edit: boolean;
-  send_by: string;
-  text: string;
-  users: {
-    avatar_url: string;
-    created_at: string;
-    display_name: string;
-    user_name: string;
-    email: string;
-    id: string;
-  } | null;
-};
+import { Imessage } from '@/lib/type/type';
 
 interface MessageState {
   messages: Imessage[];

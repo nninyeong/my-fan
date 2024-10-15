@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import MessageMenu from './MessageMenu';
+import { Imessage } from '@/lib/type/type';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
-import { Imessage } from '@/lib/stores/useMessagesStore';
 
 export default function Message({ message }: { message: Imessage }) {
   const user = useAuthStore((state) => state.user);

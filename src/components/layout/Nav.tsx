@@ -19,6 +19,8 @@ export default function Nav() {
     user: state.user,
   }));
 
+  console.log(`user`, user);
+
   const {
     data: session,
     isLoading,
