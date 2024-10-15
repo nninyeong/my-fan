@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ArtistData } from '../[id]/types/artist';
+import { ArtistData } from '../../../lib/type/artist';
 
 const fetchArtistData = async () => {
   const res = await fetch(`/api/artist`);
