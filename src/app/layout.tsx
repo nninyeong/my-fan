@@ -30,10 +30,10 @@ export default function RootLayout({
         href='/icons/logo-fullname.png'
         sizes='any'
       />
-      <body className={`${pretendard.variable} antialiased bg-background text-foreground`}>
+      <body className={`${pretendard.variable} flex flex-col min-h-screen antialiased bg-background text-foreground`}>
         <Providers>
           <Header />
-          {children}
+          <main className='flex-1'>{children}</main>
           <Footer />
         </Providers>
         <ScrollTop />
