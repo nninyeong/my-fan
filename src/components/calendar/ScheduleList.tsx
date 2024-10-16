@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarInitDataType, Schedule } from '@/lib/type/scheduleTypes';
+import { Schedule } from '@/lib/type/scheduleTypes';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { isSameDay } from '@/utils/calendar/calendarUtils';

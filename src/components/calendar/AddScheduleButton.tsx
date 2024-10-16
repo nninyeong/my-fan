@@ -78,6 +78,8 @@ export default function AddScheduleButton({ artistId }: { artistId: string }) {
       {
         onSuccess: () => {
           reset();
+          setValue('date', new Date());
+          setDate(new Date());
           setOpen(false);
         },
       },
@@ -86,6 +88,8 @@ export default function AddScheduleButton({ artistId }: { artistId: string }) {
 
   const handleDialogClose = () => {
     reset();
+    setValue('date', new Date());
+    setDate(new Date());
     setOpen(!open);
   };
 
