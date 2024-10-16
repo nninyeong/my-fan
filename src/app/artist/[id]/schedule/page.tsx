@@ -6,7 +6,8 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { createClient } from '@/utils/supabase/server';
 
 export default async function page({ params }: { params: { id: string } }) {
-  const artistId = params.id;
+  const id = params.id;
+  const artistId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
   const today = new Date();
   const year = getYear(today);
