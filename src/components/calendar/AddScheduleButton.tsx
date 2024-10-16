@@ -82,10 +82,15 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
     );
   };
 
+  const handleDialogClose = () => {
+    reset();
+    setOpen(!open);
+  };
+
   return (
     <Dialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={handleDialogClose}
     >
       <div className='flex justify-end mr-5'>
         <DialogTrigger asChild>
