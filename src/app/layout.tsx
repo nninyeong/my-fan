@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/lib/providers/ThemeProvider';
 import Providers from '@/lib/providers/QueryProvider';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import Session from '@/components/layout/Session';
 import ScrollTop from '@/components/layout/ScrollTop';
 import '@/styles/globals.css';
 import { Toaster } from 'sonner';
@@ -43,20 +44,23 @@ export default function RootLayout({
         crossOrigin='anonymous'
       />
       <body className={`${pretendard.variable} flex flex-col min-h-screen antialiased bg-background text-foreground`}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='light'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Providers>
-            <Header />
-            <main className='flex-1'>{children}</main>
-            <Footer />
-          </Providers>
-          <Toaster position='bottom-right' />
-          <ScrollTop />
-        </ThemeProvider>
+        
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='light'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Providers>
+              <Session>
+              <Header />
+              <main className='flex-1'>{children}</main>
+              <Footer />
+              </Session>
+            </Providers>
+            <Toaster position='bottom-right' />
+            <ScrollTop />
+          </ThemeProvider>
       </body>
     </html>
   );

@@ -85,10 +85,23 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
       }
     } else {
       const { email, password } = formData as LoginFormData;
-      const { data, error } = await browserClient.auth.signInWithPassword({
+      const { error } = await browserClient.auth.signInWithPassword({
         email,
         password,
       });
+
+      // if (error) {
+      //   console.error('로그인 오류:', error.message);
+      //   toast.error(error.message);
+      // } else {
+      //   toast.success('로그인 성공');
+      //   setLogin(true);
+      //   router.push('/');
+
+      //   if (data.user) {
+      //     setUser(data.user);
+      //   }
+      // }
 
       if (error) {
         console.error('로그인 오류:', error.message);
@@ -96,10 +109,16 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
       } else {
         toast.success('로그인 성공');
         setLogin(true);
-        router.push('/');
 
-        if (data.user) {
-          setUser(data.user);
+        await browserClient.auth.refreshSession();
+        const { data: userData, error: userError } = await browserClient.auth.getUser();
+
+        if (userError || !userData) {
+          console.error('사용자 데이터 가져오기 오류:', userError?.message);
+          toast.error('사용자 데이터를 불러오는 중 오류가 발생했습니다.');
+        } else {
+          setUser(userData.user);
+          router.push('/');
         }
       }
     }
