@@ -20,6 +20,7 @@ import { Plus } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ScheduleFormValues, scheduleSchema } from '@/utils/zod/scheduleSchema';
 
 // TODO: zustand userId 세팅 머지 후 artistId만 받아오기
 export default function AddScheduleButton({ artistId, userId }: { artistId: string; userId: string | undefined }) {
