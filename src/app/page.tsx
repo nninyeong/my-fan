@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
+import Link from 'next/link';
 
 type Group = {
   id: string;
@@ -59,16 +60,18 @@ export default function Home() {
                   key={index}
                   className='bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer'
                 >
-                  <div className='p-4'>
-                    <img
-                      src={item.thumbnail}
-                      alt='Artist Thumbnail'
-                      className='w-full h-auto object-cover rounded-t-lg '
-                    />
-                  </div>
-                  <div className='p-4 text-center'>
-                    <p className='text-xl font-bold'>{item.id}</p>
-                  </div>
+                  <Link href={`artist/${item.id}`}>
+                    <div className='p-4'>
+                      <img
+                        src={item.thumbnail}
+                        alt='Artist Thumbnail'
+                        className='w-full h-auto object-cover rounded-t-lg '
+                      />
+                    </div>
+                    <div className='p-4 text-center'>
+                      <p className='text-xl font-bold'>{item.id}</p>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
