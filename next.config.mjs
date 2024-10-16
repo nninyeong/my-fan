@@ -13,7 +13,7 @@ const nextConfig = {
         pathname: '/storage/v1/object/public/avatars/**',
       },
     ],
-    domains: ['zjzxtdplbzlpmnvdrlbu.supabase.co'],
+    domains: ['sqeuibzetolbikvgjolr.supabase.co'],
   },
 };
 

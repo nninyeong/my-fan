@@ -11,16 +11,6 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    // exchangeCodeForSession이거 말고 인가코드 주는 토큰으로 유저정보 받는거 <!-- 유즈이펙트 안으로 들어가는거
-    // 받아서 토큰가지고 깃허브 DB에 유저정보를 가져오는
-    // 세션에서 토큰 있으면 유저정보 요청하는게 있을꺼야
-    // 없으면 망함 ㅅㄱ
-    // 이거로 로그인하는거 아니고 db에 getuser같은거 배열로 보내서
-    // 인증했으니까 정보내놔
-    // authto 그게 없으면 page.tsx
-    // !!!!!!!!!!!!!!!!!!!!!유즈파람즈로 빼오고
-    // oauth2.0 jwt
-
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host'); // 로드 밸런서 이전의 원래 origin
       const isLocalEnv = process.env.NODE_ENV === 'development';

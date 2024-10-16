@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChangeUserInfo } from '@/components/mypage/ChangeUserInfo';
-import { ChangeImage } from '@/components/mypage/ChangeImage';
+import ChangeImage from '@/components/mypage/ChangeImage';
 import { UserInfo } from '@/components/mypage/UserInfo';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import Loading from './loading';
@@ -13,6 +13,7 @@ export interface ChangeUserInfoProps {
     email: string;
     nickname: string;
   };
+
   setFormData: React.Dispatch<
     React.SetStateAction<{
       email: string;
@@ -46,7 +47,7 @@ export default function Page() {
         </CardHeader>
         <CardContent>
           <div className='flex flex-col items-center space-y-1.5'>
-            <ChangeImage avatarUrl={user?.user_metadata?.avatar_url} />
+            <ChangeImage defaultAvatarUrl={user?.user_metadata?.avatar_url} />
             <ChangeUserInfo
               formData={formData}
               setFormData={setFormData}
