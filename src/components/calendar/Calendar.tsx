@@ -11,12 +11,7 @@ import CalendarControllBotton from '@/components/calendar/CalendarControllBotton
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
-// TODO: zustand에 userId 세팅 후에는 CalendarInitDataType으로만 prop type 지정
-type TempClanedarInitType = CalendarInitDataType & {
-  userId: string | undefined;
-};
-
-export default function Calendar({ artistId, userId }: TempClanedarInitType) {
+export default function Calendar({ artistId }: { artistId: string }) {
   const { calendarDate, selectedDate, selectDate } = useScheduleStore((state) => state);
   const daysInMonth = getDaysInMonth(calendarDate);
   const firstDay = getFirstDayOfMonth(calendarDate);
@@ -41,10 +36,7 @@ export default function Calendar({ artistId, userId }: TempClanedarInitType) {
           </h2>
           <CalendarControllBotton mode='next' />
         </div>
-        <AddScheduleButton
-          artistId={artistId}
-          userId={userId}
-        />
+        <AddScheduleButton artistId={artistId} />
       </div>
       <div className='grid grid-cols-7 w-full text-center'>
         {DAYS.map((day, index) => {

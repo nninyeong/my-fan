@@ -20,11 +20,13 @@ import { Plus } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
 
-// TODO: zustand userId 세팅 머지 후 artistId만 받아오기
-export default function AddScheduleButton({ artistId, userId }: { artistId: string; userId: string | undefined }) {
+export default function AddScheduleButton({ artistId }: { artistId: string }) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
+
+  const { user } = useAuthStore((state) => state);
 
   const scheduleSchema = z.object({
     title: z.string().min(1, { message: '스케줄 이름을 입력해주세요.' }),
@@ -58,7 +60,7 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
 
   const { mutate: mutateSchedule } = useMutateSchedule();
   const onSubmit = (data: ScheduleFormValues) => {
-    if (!userId) {
+    if (!user) {
       // TODO: shadcn confirm dialog로 변경 -> 로그인 페이지로 이동?
       alert('잘못된 유저정보입니다. 다시 로그인해주세요.');
       return;
@@ -71,7 +73,7 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
         date: format(data.date, 'yyyy-MM-dd'),
         content: data.content || null,
         description: data.description,
-        user_id: userId,
+        user_id: user.id,
       },
       {
         onSuccess: () => {

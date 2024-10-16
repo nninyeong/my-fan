@@ -6,15 +6,13 @@ import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { isSameDay } from '@/utils/calendar/calendarUtils';
 import ScheduleDeleteButton from '@/components/calendar/ScheduleDeleteButton';
 import ScheduleEditButton from '@/components/calendar/ScheduleEditButton';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
 
-// TODO: 유나님 zustand merge 후 zustand에서 받아오기
-type TempCalendarInitialType = CalendarInitDataType & {
-  userId: string | undefined;
-};
-
-export default function ScheduleList({ artistId, userId }: TempCalendarInitialType) {
+export default function ScheduleList({ artistId }: { artistId: string }) {
   const { calendarDate, selectedDate } = useScheduleStore((state) => state);
   let { data: schedules } = useFetchSchedules(artistId, calendarDate);
+
+  const { user } = useAuthStore((state) => state);
 
   if (selectedDate && schedules) {
     schedules = schedules.filter((schedule) => isSameDay(selectedDate, schedule.date));
@@ -28,7 +26,7 @@ export default function ScheduleList({ artistId, userId }: TempCalendarInitialTy
             key={schedule.id}
             className='relative w-full border p-3'
           >
-            {schedule.user_id === userId && (
+            {schedule.user_id === user?.id && (
               <div className='absolute right-3 bottom-3 flex'>
                 <ScheduleEditButton schedule={schedule} />
                 <ScheduleDeleteButton scheduleId={schedule.id} />

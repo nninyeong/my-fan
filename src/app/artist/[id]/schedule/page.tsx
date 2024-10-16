@@ -3,7 +3,6 @@ import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import ScheduleList from '@/components/calendar/ScheduleList';
 import getInitialSchedules from '@/queries/getInitialSchedules';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { createClient } from '@/utils/supabase/server';
 
 export default async function page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -22,19 +21,11 @@ export default async function page({ params }: { params: { id: string } }) {
     queryFn: () => getInitialSchedules(artistId, startDate, endDate),
   });
 
-  // TODO: 유나님이 zustand에 session 정보 통합해주시면 그 데이터로 변경
-  const client = createClient();
-  const { data: sessionData, error } = await client.auth.getSession();
-
-  if (error) throw new Error(error.message);
-  console.log('userId: ', sessionData.session?.user.id);
-  const userId = sessionData.session?.user.id;
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className='flex justify-center items-start gap-10 w-full mt-14'>
         <div className='border p-5 w-[900px]'>
-          <h3>{artistId}</h3>
+          <h3 className='font-bold'>{artistId} 스케줄</h3>
           <Calendar
             artistId={artistId}
             userId={userId}
