@@ -14,6 +14,10 @@ const PostDetail = () => {
     title: '',
     body: '',
     artist_id: '',
+    users: {
+      display_name: '',
+      id: '',
+    },
   });
   const supabase = createClient();
 
@@ -22,7 +26,19 @@ const PostDetail = () => {
 
   //해당 글 불러오기
   const getPosts = async (postId: string): Promise<CommunityPost | undefined> => {
-    const { data, error } = await supabase.from('posts').select('*').eq('id', postId).single();
+    const { data, error } = await supabase
+      .from('posts')
+      .select(
+        `
+      *,
+      users (
+        id,
+        display_name
+      )
+    `,
+      )
+      .eq('id', postId)
+      .single();
     setPosts(data as CommunityPost);
 
     if (error) {

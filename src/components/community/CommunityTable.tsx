@@ -34,7 +34,7 @@ export default function CommunityTable({ posts }: PostPropType) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='text-center w-[100px] '>가수</TableHead>
+              <TableHead className='text-center w-[150px] '>가수</TableHead>
               <TableHead className='text-center w-[150px]'>글쓴이</TableHead>
               <TableHead className='text-center'>제목</TableHead>
               <TableHead className='text-center w-[200px]'>등록일</TableHead>
@@ -49,7 +49,7 @@ export default function CommunityTable({ posts }: PostPropType) {
                 '
               >
                 <TableCell className='font-medium'>{post.artist_id}</TableCell>
-                <TableCell>{post.user_id}</TableCell>
+                <TableCell>{post.users.display_name}</TableCell>
                 <TableCell>{post.title}</TableCell>
                 <TableCell className='text-right'>{formatDate(post.created_at)}</TableCell>
               </TableRow>
