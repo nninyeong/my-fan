@@ -17,46 +17,65 @@ import { Calendar } from '@/components/ui/calendar';
 import { useMutateSchedule } from '@/queries/fetchSchedules';
 import { format } from 'date-fns';
 import { Plus } from 'lucide-react';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 // TODO: zustand userId 세팅 머지 후 artistId만 받아오기
 export default function AddScheduleButton({ artistId, userId }: { artistId: string; userId: string | undefined }) {
-  const [title, setTitle] = useState('');
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [description, setDescription] = useState('');
-  const [content, setContent] = useState('');
-
-  const initializeForm = () => {
-    setTitle('');
-    setDate(new Date());
-    setDescription('');
-    setContent('');
-  };
-
   const [open, setOpen] = useState(false);
 
+  const scheduleSchema = z.object({
+    title: z.string().min(1, { message: '스케줄 이름을 입력해주세요.' }),
+    description: z.string().min(1, { message: '상세정보를 입력해주세요.' }),
+    date: z
+      .date({ invalid_type_error: '날짜는 Date 객체여야 합니다.' })
+      .nullable()
+      .refine((d) => d !== null, {
+        message: '날짜는 필수 항목입니다.',
+      }),
+    content: z.string().optional(),
+  });
+
+  type ScheduleFormValues = z.infer<typeof scheduleSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm<ScheduleFormValues>({
+    resolver: zodResolver(scheduleSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      date: new Date(),
+      content: '',
+    },
+  });
+
   const { mutate: mutateSchedule } = useMutateSchedule();
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // TODO: 유효성검사 -> 아래 에러처리 다시
-
-    if (!date || !userId) {
-      alert('유저 정보가 없거나 날짜가 잘못되었습니다.');
+  const onSubmit = (data: ScheduleFormValues) => {
+    if (!userId) {
+      // TODO: shadcn confirm dialog로 변경 -> 로그인 페이지로 이동?
+      alert('잘못된 유저정보입니다. 다시 로그인해주세요.');
       return;
     }
 
     mutateSchedule(
       {
         artist_id: artistId,
-        title,
-        date: format(date, 'yyyy-MM-dd'),
-        content,
-        description,
+        title: data.title,
+        date: format(data.date, 'yyyy-MM-dd'),
+        content: data.content || null,
+        description: data.description,
         user_id: userId,
       },
       {
         onSuccess: () => {
-          initializeForm();
+          reset();
           setOpen(false);
         },
       },
@@ -80,7 +99,7 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
         </DialogTrigger>
       </div>
       <DialogContent>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>스케줄 추가하기</DialogTitle>
             <DialogDescription>{artistId}의 스케줄을 공유해주세요!</DialogDescription>
@@ -95,10 +114,10 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
               </Label>
               <Input
                 id='title'
+                {...register('title')}
                 className='col-span-3'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
               />
+              {errors.title && <p className='text-red-500'>{errors.title.message}</p>}
             </div>
             <div className='grid grid-cols-4 items-center gap-5'>
               <Label
@@ -110,9 +129,13 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
               <Calendar
                 mode='single'
                 selected={date}
-                onSelect={setDate}
+                onSelect={(date) => {
+                  setDate(date);
+                  setValue('date', date as Date);
+                }}
                 className='rounded-md'
               />
+              {errors.date && <p className='text-red-500'>{errors.date.message}</p>}
             </div>
             <div className='grid grid-cols-4 items-center gap-5'>
               <Label
@@ -125,9 +148,9 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
                 id='description'
                 placeholder='장소, 시간 등 정보를 입력해주세요'
                 className='col-span-3'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                {...register('description')}
               />
+              {errors.description && <p className='text-red-500'>{errors.description.message}</p>}
             </div>
             <div className='grid grid-cols-4 items-center gap-5'>
               <Label
@@ -140,9 +163,9 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
                 id='content'
                 placeholder='자세한 설명을 입력해주세요'
                 className='col-span-3'
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                {...register('content')}
               />
+              {errors.content && <p className='text-red-500'>{errors.content.message}</p>}
             </div>
           </div>
           <DialogFooter>
