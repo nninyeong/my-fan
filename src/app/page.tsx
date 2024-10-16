@@ -38,15 +38,15 @@ export default function Home() {
   return (
     <section className='grid justify-items-center min-h-screen py-8 pb-20 m-auto container'>
       <article className='flex flex-wrap flex-col gap-10 p-4'>
+        <div className='txt'>
+          <h2 className='font-bold'>좋아하는 아티스트를 검색하세요!</h2>
+        </div>
         <Input
           placeholder='아티스트 검색'
           value={artistName} // 입력값을 상태와 연결
           onChange={(e) => setArtistName(e.target.value)} // 입력값 변경 시 상태 업데이트
         />
         <Button onClick={fetchArtistList}>검색</Button> {/* 클릭 시 검색 실행 */}
-        <div className='txt'>
-          <h2 className='font-bold'>좋아하는 아티스트를 검색하세요!</h2>
-        </div>
       </article>
       {isLoading ? (
         <p>Loading...</p>
