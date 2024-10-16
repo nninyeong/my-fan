@@ -7,8 +7,8 @@ import { useParams } from 'next/navigation';
 
 export default function Page() {
   const [artist, setArtist] = useState<Groups[] | null>(null);
-  const [groups, setGroup] = useState<string[]>([]);
-  const [images, setImages] = useState<string[]>([]); // 이미지 URL 상태
+  const [groups, setGroup] = useState<string[]>([]); // artist 그룹 상태
+  const [images, setImages] = useState<string[]>([]); // artist 이미지 URL 상태
   const [names, setNames] = useState<string[]>([]); // artist 이름 상태
   const [birthday, setArtistBirthday] = useState<string[]>([]); // artist 생일 상태
 
