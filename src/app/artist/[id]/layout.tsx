@@ -16,6 +16,7 @@ export default function Layout({
   return (
     <section className='min-h-screen m-auto py-1 pb-20 container'>
       <div className='flex items-center justify-center border-b dark:border-b-white border-b-black border-t-0 gap-4'>
+        <Link href={`/artist/${urlId}`}>아티스트</Link>
         <Link href={`/artist/${urlId}/community`}>커뮤니티</Link>
         <Link href={`/artist/${urlId}/schedule`}>스케쥴</Link>
       </div>
