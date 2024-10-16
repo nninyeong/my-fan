@@ -15,7 +15,7 @@
 // };
 
 // 유저 정보
-export type User = {
+export type UsersData = {
   id: string;
   created_at: string;
   display_name?: string;
@@ -31,5 +31,5 @@ export type Imessage = {
   is_edit: boolean;
   send_by: string;
   text: string;
-  users: User | null;
+  users: UsersData | null;
 };

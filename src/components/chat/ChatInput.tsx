@@ -1,6 +1,7 @@
 'use client';
 
-import { Imessage, useMessage } from '@/lib/stores/useMessagesStore';
+import { Imessage } from '@/lib/type/type';
+import { useMessage } from '@/lib/stores/useMessagesStore';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import browserClient from '@/utils/supabase/client';
 import { Input } from '@/components/ui/input';

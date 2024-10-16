@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import browserClient from '@/utils/supabase/client';
-import { User } from '@/lib/type/type';
+import { UsersData } from '@/lib/type/type';
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[] | null>(null);
+  const [users, setUsers] = useState<UsersData[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

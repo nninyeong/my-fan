@@ -3,7 +3,8 @@ import { Input } from '@/components/ui/input';
 import { CardDemo } from '@/components/shared/CardDemo';
 import { CarouselDemo } from '@/components/shared/CarouselDemo';
 import { DialogDemo } from '@/components/shared/DialogDemo';
-import UsersPage from '@/components/layout/test';
+import UsersPage from '@/components/test/test';
+import Profile from '@/components/test/test2';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         <div className='txt'>
           <h2 className='font-bold'>example</h2>
         </div>
+        <Profile />
         <UsersPage />
         <Button>button</Button>
         <Input />
