@@ -2,7 +2,7 @@
 
 import { Pencil } from 'lucide-react';
 import { useUpdateSchedule } from '@/queries/fetchSchedules';
-import { Schedule, ScheduleUpdate } from '@/lib/type/scheduleTypes';
+import { Schedule } from '@/lib/type/scheduleTypes';
 import {
   Dialog,
   DialogContent,
