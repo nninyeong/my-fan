@@ -26,10 +26,10 @@ export default function ScheduleList({ artistId, initialDate, userId }: TempCale
         schedules.map((schedule: Schedule) => (
           <div
             key={schedule.id}
-            className='relative w-full h-[100px] border p-3'
+            className='relative w-full border p-3'
           >
             {schedule.user_id === userId && (
-              <div className='absolute right-3 top-3 flex gap-1'>
+              <div className='absolute right-3 bottom-3 flex'>
                 <ScheduleEditButton schedule={schedule} />
                 <ScheduleDeleteButton scheduleId={schedule.id} />
               </div>
