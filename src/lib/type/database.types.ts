@@ -9,143 +9,68 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      comments: {
-        Row: {
-          artist_id: number
-          content_text: string
-          created_at: string
-          id: string
-          parent_comment_id: number | null
-          post_id: string
-          user_id: string | null
-        }
-        Insert: {
-          artist_id: number
-          content_text: string
-          created_at?: string
-          id?: string
-          parent_comment_id?: number | null
-          post_id: string
-          user_id?: string | null
-        }
-        Update: {
-          artist_id?: number
-          content_text?: string
-          created_at?: string
-          id?: string
-          parent_comment_id?: number | null
-          post_id?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      likes: {
-        Row: {
-          artist: number | null
-          created_at: string | null
-          id: string
-          user_id: number | null
-        }
-        Insert: {
-          artist?: number | null
-          created_at?: string | null
-          id?: string
-          user_id?: number | null
-        }
-        Update: {
-          artist?: number | null
-          created_at?: string | null
-          id?: string
-          user_id?: number | null
-        }
-        Relationships: []
-      }
       messages: {
         Row: {
           created_at: string
           id: string
           is_edit: boolean
           send_by: string
-          text: string
+          text: boolean
         }
         Insert: {
           created_at?: string
           id?: string
-          is_edit?: boolean
+          is_edit: boolean
           send_by?: string
-          text: string
+          text: boolean
         }
         Update: {
           created_at?: string
           id?: string
           is_edit?: boolean
           send_by?: string
-          text?: string
+          text?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "messages_send_by_fkey"
-            columns: ["send_by"]
-            isOneToOne: false
+            foreignKeyName: "messages_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
       }
-      posts: {
+      profiles: {
         Row: {
-          artist_id: number
-          body: string
-          created_at: string | null
+          avatar_url: string | null
+          display_name: string | null
+          email: string | null
+          full_name: string | null
           id: string
-          title: string
-          user_id: string | null
+          updated_at: string | null
+          username: string | null
+          website: string | null
         }
         Insert: {
-          artist_id: number
-          body: string
-          created_at?: string | null
-          id?: string
-          title: string
-          user_id?: string | null
-        }
-        Update: {
-          artist_id?: number
-          body?: string
-          created_at?: string | null
-          id?: string
-          title?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      resalePosts: {
-        Row: {
-          body: string | null
-          created_at: string | null
+          avatar_url?: string | null
+          display_name?: string | null
+          email?: string | null
+          full_name?: string | null
           id: string
-          img_url: string | null
-          price: number | null
-          title: string | null
-          user_id: number | null
-        }
-        Insert: {
-          body?: string | null
-          created_at?: string | null
-          id?: string
-          img_url?: string | null
-          price?: number | null
-          title?: string | null
-          user_id?: number | null
+          updated_at?: string | null
+          username?: string | null
+          website?: string | null
         }
         Update: {
-          body?: string | null
-          created_at?: string | null
+          avatar_url?: string | null
+          display_name?: string | null
+          email?: string | null
+          full_name?: string | null
           id?: string
-          img_url?: string | null
-          price?: number | null
-          title?: string | null
-          user_id?: number | null
+          updated_at?: string | null
+          username?: string | null
+          website?: string | null
         }
         Relationships: []
       }
@@ -177,39 +102,39 @@ export type Database = {
           title?: string
           user_id?: string | null
         }
-        Relationships: []
-      }
-      users: {
-        Row: {
-          avatar_url: string
-          created_at: string
-          display_name: string
-          email: string
-          id: string
-        }
-        Insert: {
-          avatar_url: string
-          created_at?: string
-          display_name: string
-          email: string
-          id?: string
-        }
-        Update: {
-          avatar_url?: string
-          created_at?: string
-          display_name?: string
-          email?: string
-          id?: string
-        }
         Relationships: [
           {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
+            foreignKeyName: "schedule_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
+      }
+      users: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
@@ -307,4 +232,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
