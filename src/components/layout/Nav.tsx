@@ -19,7 +19,6 @@ export default function Nav() {
     clearAuth: state.clearAuth,
   }));
 
-
   const {
     data: session,
     isLoading,
@@ -28,6 +27,7 @@ export default function Nav() {
     queryKey: ['session'],
     queryFn: async () => {
       const { data } = await browserClient.auth.getSession();
+      console.log('세션 데이터:', data);
       return data.session;
     },
   });
@@ -50,8 +50,8 @@ export default function Nav() {
       await browserClient.auth.signOut();
     },
     onSuccess: () => {
-      clearAuth(); // 세션 정보 제거
-      router.refresh();
+      clearAuth();
+      router.push('/');
     },
     onError: (error: Error) => {
       console.error('로그아웃 에러:', error);

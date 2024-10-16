@@ -16,7 +16,17 @@ export default function Page() {
   }
 
   return (
-    <div>
+    <div className='min-h-screen m-auto pb-20 container'>
+      <div className='w-52 h-52 rounded-full overflow-hidden'>
+        {user && user.user_metadata?.avatar_url ? (
+          <img
+            src={user.user_metadata.avatar_url}
+            alt='User Avatar'
+          />
+        ) : (
+          <p></p>
+        )}
+      </div>
       <p>사용자 정보: {user ? user.email : '로그인 필요'}</p>
       <p>
         사용자 메타데이터:{' '}

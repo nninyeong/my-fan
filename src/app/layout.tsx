@@ -54,7 +54,7 @@ export default function RootLayout({
             <main className='flex-1'>{children}</main>
             <Footer />
           </Providers>
-          <Toaster position='top-center' />
+          <Toaster position='bottom-right' />
           <ScrollTop />
         </ThemeProvider>
       </body>

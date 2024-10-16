@@ -11,7 +11,7 @@ import { ArrowDown } from 'lucide-react';
 
 export default function ListMessages() {
   const scrollRef = useRef<HTMLDivElement>(null); // 스크롤 위치 추적
-  const [userScrolled, setUserScrolled] = useState(false);
+  const [userScrolled, setUserScrolled] = useState<boolean>(false);
   const { messages, addMessage, optimisticIds, optimisticDeleteMessage, optimisticUpdateMessage } = useMessage();
 
   // Supabase 구독 설정
