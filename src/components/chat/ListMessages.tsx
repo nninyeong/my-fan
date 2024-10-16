@@ -74,11 +74,16 @@ export default function ListMessages() {
   return (
     <>
       <div
-        className='flex-1 flex flex-col p-5 h-full overflow-y-auto gap-5' ref={scrollRef} onScroll={handleOnScroll}>
-
+        className='flex-1 flex flex-col p-5 h-full overflow-y-auto gap-5'
+        ref={scrollRef}
+        onScroll={handleOnScroll}
+      >
         <div className='space-y-7'>
           {messages.map((value, index) => (
-            <Message key={index} message={value}/>
+            <Message
+              key={index}
+              message={value}
+            />
           ))}
         </div>
 

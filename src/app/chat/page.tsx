@@ -8,7 +8,7 @@ import InitUser from '@/lib/stores/InitUser';
 export default async function page() {
   const supabase = createClient();
   const { data } = await supabase.auth.getSession();
-
+  console.log(data);
   return (
     <div className='grid gap-4'>
       <div className='w-full mx-auto md:py-10 md:px-4 h-screen'>

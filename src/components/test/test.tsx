@@ -40,7 +40,7 @@ export default function UsersPage() {
               className='mb-4'
             >
               <img
-                src={user.avatar_url}
+                src={user.avatar_url || '/default-avatar.png'}
                 alt={user.display_name || 'User avatar'}
                 width={50}
                 height={50}

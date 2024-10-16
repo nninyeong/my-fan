@@ -12,14 +12,13 @@ export default function Nav() {
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
 
-  const { isLogin, setLogin, user, setUser } = useAuthStore((state) => ({
+  const { isLogin, setLogin, user, clearAuth } = useAuthStore((state) => ({
+    user: state.user,
     isLogin: state.isLogin,
     setLogin: state.setLogin,
-    setUser: state.setUser,
-    user: state.user,
+    clearAuth: state.clearAuth,
   }));
 
-  console.log(`user`, user);
 
   const {
     data: session,
@@ -48,11 +47,10 @@ export default function Nav() {
   // 로그아웃
   const signOutMutation = useMutation({
     mutationFn: async () => {
-      return await browserClient.auth.signOut();
+      await browserClient.auth.signOut();
     },
     onSuccess: () => {
-      setLogin(false);
-      setUser(undefined);
+      clearAuth(); // 세션 정보 제거
       router.refresh();
     },
     onError: (error: Error) => {

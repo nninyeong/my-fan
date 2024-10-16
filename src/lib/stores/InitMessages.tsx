@@ -1,7 +1,8 @@
 'use client';
 
+import { Imessage } from '@/lib/type/type';
 import { useEffect, useRef } from 'react';
-import { Imessage, useMessage } from '@/lib/stores/useMessagesStore';
+import { useMessage } from '@/lib/stores/useMessagesStore';
 
 export default function InitMessages({ messages }: { messages: Imessage[] }) {
   const initState = useRef(false);

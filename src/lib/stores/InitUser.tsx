@@ -8,13 +8,14 @@ import { useAuthStore } from './useAuthStore';
 export default function InitUser({ user }: { user: User | undefined }) {
   const { setUser } = useAuthStore();
   const initState = useRef(false);
-
   useEffect(() => {
     if (!initState.current && user) {
       setUser(user);
     }
 
     initState.current = true;
+
+    console.log(user?.user_metadata);
   }, [user, setUser]);
 
   return null;

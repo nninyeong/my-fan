@@ -2,10 +2,10 @@
 export type UsersData = {
   id: string;
   created_at: string;
-  display_name?: string;
-  user_name?: string;
-  avatar_url: string;
-  email: string;
+  display_name?: string | null;
+  user_name?: string | null;
+  avatar_url: string | null;
+  email: string | null;
 };
 
 // 메시지 타입
