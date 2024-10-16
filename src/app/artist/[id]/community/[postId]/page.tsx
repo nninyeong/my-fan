@@ -1,6 +1,7 @@
 'use client';
 import Comment from '@/components/community/Comment';
 import DetailPost from '@/components/community/DetailPost';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 import { createClient } from '@/utils/supabase/client';
 import { useParams } from 'next/navigation';
@@ -23,6 +24,25 @@ const PostDetail = () => {
 
   const value = useParams<{ postId: string }>(); //!!!
   const postId: string = value.postId; //????? 걍 string 인데 ==> ok!!!
+
+  //SECTION -
+  const [userInfo, setUserInfo] = useState<Users[] | null>([]);
+  const { user } = useAuthStore();
+  const userId = user?.id;
+
+  //로그인 한 사용자 정보 가져오기(깃허브X)
+  const fetchUserInfo = async () => {
+    const { data, error } = await supabase.from('users').select(`*`).eq('id', userId!);
+    if (error) {
+      console.error('Error fetching user info:', error);
+      return;
+    }
+    if (data && data.length > 0) {
+      const Info = data[0];
+      setUserInfo(Info);
+    }
+  };
+  //SECTION -
 
   //해당 글 불러오기
   const getPosts = async (postId: string): Promise<CommunityPost | undefined> => {
@@ -49,6 +69,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     getPosts(postId);
+    fetchUserInfo();
   }, []);
 
   return (
@@ -58,7 +79,7 @@ const PostDetail = () => {
           posts={posts}
           postId={postId}
         />
-        <Comment />
+        <Comment userInfo={userInfo} />
       </div>
     </div>
   );
