@@ -43,8 +43,6 @@ export default function Page() {
 
       setArtist(data);
 
-      // console.log(data);
-
       const artistGroup =
         data?.map((element) => element.group).filter((group): group is string => group !== null) || [];
       setGroup(artistGroup);
@@ -65,9 +63,6 @@ export default function Page() {
       console.error('Unexpected error:', err);
     }
   }
-  // console.log(artist);
-  // console.log(groups);
-  // console.log(images);
 
   // 캐러셀 이동 및 처음 이지미에서 멈춤
   const handlePrev = () => {
