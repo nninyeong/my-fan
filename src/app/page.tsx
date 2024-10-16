@@ -17,7 +17,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
   const fetchArtistList = async () => {
-    if (artistName.trim() === '') return; // 이름이 비어 있으면 실행 안 함
+    if (artistName.trim() === '') {
+      alert('찾고싶은 아티스트명을 입력해주세요!');
+      return; // 이름이 비어 있으면 실행 안 함
+    }
 
     setIsLoading(true);
     try {
@@ -54,13 +57,13 @@ export default function Home() {
               {artist.map((item: Group, index: number) => (
                 <li
                   key={index}
-                  className='bg-white shadow-lg rounded-lg overflow-hidden'
+                  className='bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer'
                 >
                   <div className='p-4'>
                     <img
                       src={item.thumbnail}
                       alt='Artist Thumbnail'
-                      className='w-full h-auto object-cover rounded-t-lg'
+                      className='w-full h-auto object-cover rounded-t-lg '
                     />
                   </div>
                   <div className='p-4 text-center'>
@@ -70,7 +73,7 @@ export default function Home() {
               ))}
             </ul>
           ) : (
-            <p>No artist data</p>
+            <p>해당 아티스트가 없습니다!</p>
           )}
         </div>
       )}
