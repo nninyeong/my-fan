@@ -34,7 +34,8 @@ export default function PostForm({ userInfo }: UserInfo) {
 
   //URL 아티스트 id
   const value = useParams();
-  const artistId = value.id;
+  const id = value.id;
+  const artistId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
   //해당 글 불러오기
   const getPost = async (postId: PostId) => {
@@ -55,7 +56,7 @@ export default function PostForm({ userInfo }: UserInfo) {
         title,
         body: content,
         artist_id: artistId,
-        user_id: userInfo.id, //TODO - 유저정보 가져와서 넣기
+        user_id: userInfo.id,
       },
     ]);
 
