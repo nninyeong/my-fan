@@ -1,101 +1,85 @@
-import Image from "next/image";
+'use client';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import axios from 'axios';
+import Link from 'next/link';
+
+type Group = {
+  id: string;
+  member: Array<string>;
+  debut_date: string;
+  thumbnail: string;
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [artistName, setArtistName] = useState(''); // 아티스트 이름 상태
+  const [artist, setArtist] = useState([]); // 검색된 아티스트 상태
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const fetchArtistList = async () => {
+    if (artistName.trim() === '') {
+      alert('찾고싶은 아티스트명을 입력해주세요!');
+      return; // 이름이 비어 있으면 실행 안 함
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`/api/artist`, {
+        params: { name: artistName }, // API 라우트에 쿼리 파라미터 전달
+      });
+      setArtist(response.data.data); // 받아온 데이터를 상태에 저장
+    } catch (error) {
+      console.error('Failed to fetch artist list:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <section className='grid justify-items-center min-h-screen py-8 pb-20 m-auto container'>
+      <article className='flex flex-wrap flex-col gap-10 p-4'>
+        <div className='txt'>
+          <h2 className='font-bold'>좋아하는 아티스트를 검색하세요!</h2>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <Input
+          placeholder='아티스트 검색'
+          value={artistName} // 입력값을 상태와 연결
+          onChange={(e) => setArtistName(e.target.value)} // 입력값 변경 시 상태 업데이트
+        />
+        <Button onClick={fetchArtistList}>검색</Button> {/* 클릭 시 검색 실행 */}
+      </article>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          {artist.length > 0 ? (
+            <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+              {artist.map((item: Group, index: number) => (
+                <li
+                  key={index}
+                  className='bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer'
+                >
+                  <Link href={`artist/${item.id}`}>
+                    <div className='p-4'>
+                      <img
+                        src={item.thumbnail}
+                        alt='Artist Thumbnail'
+                        className='w-full h-auto object-cover rounded-t-lg '
+                      />
+                    </div>
+                    <div className='p-4 text-center'>
+                      <p className='text-xl font-bold'>{item.id}</p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>해당 아티스트가 없습니다!</p>
+          )}
+        </div>
+      )}
+    </section>
   );
 }

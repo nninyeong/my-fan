@@ -1,0 +1,101 @@
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { OAuthResponse } from '@supabase/supabase-js';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
+import { Session } from '@supabase/supabase-js'; // Supabase에서 제공하는 Session 타입
+import browserClient from '@/utils/supabase/client';
+import { Button } from '../../src/components/ui/button';
+
+export default function AuthButton() {
+  const [hydrated, setHydrated] = useState(false);
+
+  const { isLogin, setLogin } = useAuthStore((state) => ({
+    isLogin: state.isLogin,
+    setLogin: state.setLogin,
+  }));
+
+  const {
+    data: session,
+    isLoading,
+    isError,
+  } = useQuery<Session | null>({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const { data } = await browserClient.auth.getSession();
+      return data.session;
+    },
+  });
+
+  useEffect(() => {
+    if (!hydrated) {
+      setHydrated(true);
+    }
+
+    if (session) {
+      setLogin(true);
+    } else if (isError) {
+      setLogin(false);
+    }
+  }, [session, isError, hydrated, setLogin]);
+
+  // GitHub 로그인
+  const signInMutation = useMutation({
+    mutationFn: async (): Promise<OAuthResponse> => {
+      return await browserClient.auth.signInWithOAuth({
+        provider: 'github',
+      });
+    },
+    onSuccess: () => {
+      setLogin(true);
+    },
+    onError: (error: Error) => {
+      console.error('로그인 에러:', error);
+    },
+  });
+
+  console.log(signInMutation);
+
+  // 로그아웃
+  const signOutMutation = useMutation({
+    mutationFn: async () => {
+      return await browserClient.auth.signOut();
+    },
+    onSuccess: () => {
+      setLogin(false); // 로그아웃 성공 후 상태 업데이트
+    },
+    onError: (error: Error) => {
+      console.error('로그아웃 에러:', error);
+    },
+  });
+
+  if (!hydrated || isLoading) {
+    return null;
+  }
+
+  return (
+    <>
+      {isLogin ? (
+        <>
+          <li>
+            <Link href={'/mypage'}>마이페이지</Link>
+          </li>
+          <li>
+            <Button onClick={() => signOutMutation.mutate()}>로그아웃</Button>
+          </li>
+        </>
+      ) : (
+        <>
+          <li>
+            <Link href={'/signup'}>회원가입</Link>
+          </li>
+          <li>
+            <Link href={'/signIn'}>Gitbub</Link>
+          </li>
+        </>
+      )}
+    </>
+  );
+}
