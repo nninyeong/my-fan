@@ -21,8 +21,9 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
+import { ko } from 'date-fns/locale';
 
-export default function AddScheduleButton({ artistId }: { artistId: string }) {
+export default function ScheduleAddButton({ artistId }: { artistId: string }) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
 
@@ -146,6 +147,7 @@ export default function AddScheduleButton({ artistId }: { artistId: string }) {
                   setValue('date', date as Date);
                 }}
                 className='rounded-md'
+                locale={ko}
               />
               {errors.date && <p className='text-red-500'>{errors.date.message}</p>}
             </div>

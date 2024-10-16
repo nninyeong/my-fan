@@ -5,7 +5,7 @@ import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { cn } from '@/lib/utils';
 import { getFirstDayOfMonth, isSameDay } from '@/utils/calendar/calendarUtils';
-import AddScheduleButton from '@/components/calendar/AddScheduleButton';
+import ScheduleAddButton from '@/components/calendar/ScheduleAddButton';
 import CalendarControllBotton from '@/components/calendar/CalendarControllBotton';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
@@ -35,7 +35,7 @@ export default function Calendar({ artistId }: { artistId: string }) {
           </h2>
           <CalendarControllBotton mode='next' />
         </div>
-        <AddScheduleButton artistId={artistId} />
+        <ScheduleAddButton artistId={artistId} />
       </div>
       <div className='grid grid-cols-7 w-full text-center'>
         {DAYS.map((day, index) => {

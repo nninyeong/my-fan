@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
 import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 export default function ScheduleEditButton({ schedule }: { schedule: Schedule }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -89,6 +90,7 @@ export default function ScheduleEditButton({ schedule }: { schedule: Schedule })
               </Label>
               <Calendar
                 mode='single'
+                locale={ko}
                 selected={date}
                 onSelect={setDate}
                 className='rounded-md'
