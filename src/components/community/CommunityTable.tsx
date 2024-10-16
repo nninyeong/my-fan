@@ -1,15 +1,6 @@
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-// import {
-//   Pagination,
-//   PaginationContent,
-//   PaginationEllipsis,
-//   PaginationItem,
-//   PaginationLink,
-//   PaginationNext,
-//   PaginationPrevious,
-// } from '@/components/ui/pagination';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 import { useParams, useRouter } from 'next/navigation';
 import { formatDate } from '@/utils/community/communityUtil';
@@ -57,24 +48,6 @@ export default function CommunityTable({ posts }: PostPropType) {
           </TableBody>
         </Table>
       </div>
-      {/* <div className='my-4'>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href='#' />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div> */}
     </div>
   );
 }

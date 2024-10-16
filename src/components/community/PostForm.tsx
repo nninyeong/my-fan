@@ -10,7 +10,18 @@ import { Label } from '../ui/label';
 
 type PostId = string | null;
 
-export default function PostForm({ userInfo }) {
+export type UserInfo = {
+  userInfo: {
+    avatar_url: string | null;
+    created_at: string;
+    display_name: string | null;
+    email: string | null;
+    id: string;
+    user_name: string | null;
+  };
+};
+
+export default function PostForm({ userInfo }: UserInfo) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 

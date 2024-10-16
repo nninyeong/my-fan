@@ -6,8 +6,9 @@ import { createClient } from '@/utils/supabase/client';
 import { useParams } from 'next/navigation';
 import { Comments } from '@/lib/type/CommunityTypes';
 import { Input } from '../ui/input';
+import { UserInfo } from './PostForm';
 
-export default function Comment({ userInfo }) {
+export default function Comment({ userInfo }: UserInfo) {
   const supabase = createClient();
   const [comments, setComments] = useState<Comments[]>([]);
   const [comment, setComment] = useState('');

@@ -1,6 +1,7 @@
 'use client';
 import Comment from '@/components/community/Comment';
 import DetailPost from '@/components/community/DetailPost';
+import { UserInfo } from '@/components/community/PostForm';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 import { createClient } from '@/utils/supabase/client';
@@ -26,7 +27,7 @@ const PostDetail = () => {
   const postId: string = value.postId; //????? 걍 string 인데 ==> ok!!!
 
   //SECTION -
-  const [userInfo, setUserInfo] = useState<Users[] | null>([]);
+  const [userInfo, setUserInfo] = useState<UserInfo[] | null>([]);
   const { user } = useAuthStore();
   const userId = user?.id;
 

@@ -9,7 +9,6 @@ import seventeen from '../../../../../public/images/seventeen.png';
 import Image from 'next/image';
 import CommunityTable from '@/components/community/CommunityTable';
 import { useParams } from 'next/navigation';
-// http://localhost:3000/artist/seventeen/community
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
@@ -32,7 +31,6 @@ export default function CommunityPage() {
       )
       .eq('artist_id', artistId)
       .order('created_at', { ascending: false });
-    //   .returns<CommunityPost[]>();
     setPosts(data || []);
   };
 

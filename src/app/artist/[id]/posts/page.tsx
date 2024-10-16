@@ -1,13 +1,13 @@
 'use client';
 
-import PostForm from '@/components/community/PostForm';
+import PostForm, { UserInfo } from '@/components/community/PostForm';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 
 export default function Post() {
   //SECTION -
-  const [userInfo, setUserInfo] = useState<Users[] | null>([]);
+  const [userInfo, setUserInfo] = useState<UserInfo[] | null>([]);
   const { user } = useAuthStore();
   const supabase = createClient();
   const userId = user?.id;
