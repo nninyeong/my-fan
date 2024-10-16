@@ -9,11 +9,44 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      artists: {
+        Row: {
+          birthday: string
+          group: string | null
+          id: number
+          image: string
+          name: string
+        }
+        Insert: {
+          birthday: string
+          group?: string | null
+          id?: number
+          image: string
+          name: string
+        }
+        Update: {
+          birthday?: string
+          group?: string | null
+          id?: number
+          image?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artists_group_fkey"
+            columns: ["group"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           artist_id: number
           content_text: string
           created_at: string
+          edit_comment: boolean | null
           id: string
           parent_comment_id: number | null
           post_id: string
@@ -23,6 +56,7 @@ export type Database = {
           artist_id: number
           content_text: string
           created_at?: string
+          edit_comment?: boolean | null
           id?: string
           parent_comment_id?: number | null
           post_id: string
@@ -32,10 +66,47 @@ export type Database = {
           artist_id?: number
           content_text?: string
           created_at?: string
+          edit_comment?: boolean | null
           id?: string
           parent_comment_id?: number | null
           post_id?: string
           user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          debut_date: string
+          id: string
+          members: number[]
+          thumbnail: string
+        }
+        Insert: {
+          debut_date: string
+          id: string
+          members?: number[]
+          thumbnail: string
+        }
+        Update: {
+          debut_date?: string
+          id?: string
+          members?: number[]
+          thumbnail?: string
         }
         Relationships: []
       }
@@ -117,7 +188,15 @@ export type Database = {
           title?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       resalePosts: {
         Row: {
@@ -177,7 +256,15 @@ export type Database = {
           title?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "schedule_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -188,7 +275,7 @@ export type Database = {
           id: string
         }
         Insert: {
-          avatar_url: string
+          avatar_url?: string
           created_at?: string
           display_name: string
           email: string
@@ -201,15 +288,7 @@ export type Database = {
           email?: string
           id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -307,4 +386,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

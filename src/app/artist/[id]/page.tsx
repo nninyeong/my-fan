@@ -1,82 +1,41 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ArtistData } from '../../../lib/type/artist';
-
-const fetchArtistData = async () => {
-  const res = await fetch(`/api/artist`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch data');
-  }
-  return await res.json();
-};
-
-// 더미데이터
-const images = [
-  'https://pimg.mk.co.kr/news/cms/202410/14/news-p.v1.20241014.c20146c4e9ee4d209074f962870654e4_P1.jpg',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710852366f195abc282c.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710849666f19590d4578.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710848966f195892fc06.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710846966f19575b20de.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710847566f1957b76d79.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710851666f195a49dc1b.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710850166f195957cce6.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710846466f1957090b1d.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710850966f1959d84b1c.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710848366f195838218f.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710848066f195801e469.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710850566f195999c414.png',
-  'https://pledis.co.kr/resources/_data/file/bbsData/172710873566f1967fd380c.png',
-];
-// 더미데이터
-const name = [
-  '세븐틴',
-  'S.COUPS',
-  '정한',
-  '조슈아',
-  '준',
-  '호시',
-  '원우',
-  'WOOZI',
-  'THE 8',
-  '민규',
-  '도겸',
-  '승관',
-  'VERNON',
-  '디노',
-];
+import { createClient } from '@/utils/supabase/client';
+import { Groups } from '@/lib/type/artist';
 
 export default function Page() {
-  const [data, setData] = useState<ArtistData | null>(null);
-  const [loading, setLoading] = useState(true); // 로딩 상태 저장
-  const [error, setError] = useState<string | null>(null);
-  // const [artistName, setArtistName] = useState("세븐틴"); // artist 이름 저장
-
   const [currentIndex, setCurrentIndex] = useState(0); // 캐러셀 위치 상태 관리
   const [largeImageSrc, setLargeImageSrc] = useState(images[0]); // 큰 이미지 상태 관리
   const itemsPerView = 7; // 한 번에 보이는 이미지 수
 
-  // 아티스트 이름 어떻게 가져오누?
+  const [groups, setGroups] = useState<Groups[] | null>(null);
+  const [images, setImages] = useState<string[]>([]); // 이미지 URL 상태
+  const [names, setNames] = useState<string[]>([]); // 이미지 이름 상태
+
+  const supabase = createClient();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const jsonData = await fetchArtistData();
-        setData(jsonData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Failed to fetch data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    getGroups();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  async function getGroups() {
+    const { data } = await supabase.from('group_artists').select('*');
+
+    setGroups(data);
+    if (data) {
+      setGroups(data);
+      // 이미지 URL과 이름을 데이터에서 추출
+      const imageUrls = data.map((group) => group.imageUrl); // imageUrl 컬럼에서 URL 추출
+      const imageNames = data.map((group) => group.member.); // name 컬럼에서 이름 추출
+
+      setImages(imageUrls);
+      setNames(imageNames);
+      setLargeImageSrc(imageUrls[0]); // 첫 번째 이미지로 초기화
+    }
+
+    console.log(data);
+  }
 
   // 캐러셀 이동 및 처음 이지미에서 멈춤
   const handlePrev = () => {
@@ -93,12 +52,8 @@ export default function Page() {
     setLargeImageSrc(images[index]); // 클릭한 이미지로 큰 이미지 변경
   };
 
-  const parseData = JSON.stringify(data, null, 2);
-  console.log(parseData); // 파싱된 데이터 확인용
-
   return (
     <div className='flex flex-col items-center min-h-screen bg-gray-100'>
-      {/* 큰 이미지 */}
       <div className='p-4'>
         <Image
           src={largeImageSrc}
@@ -109,7 +64,6 @@ export default function Page() {
         />
       </div>
 
-      {/* 작은 이미지 캐러셀 */}
       <div className='relative w-full mt-8'>
         <button
           className='absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white rounded-full p-2 z-10'
@@ -138,7 +92,7 @@ export default function Page() {
                   width={400}
                   height={600}
                 />
-                {/* 캐러셀 이미지 호버 시 이벤트 */}
+
                 <div
                   className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg opacity-0 transition-opacity duration-300 hover:opacity-100'
                   onClick={() => handleImageClick(index)} // 이미지 클릭 시 큰 이미지 변경
@@ -158,9 +112,7 @@ export default function Page() {
           &#9654;
         </button>
       </div>
-      <div className='text-black'>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </div>
+      <div></div>
     </div>
   );
 }
