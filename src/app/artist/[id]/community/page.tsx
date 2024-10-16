@@ -9,7 +9,6 @@ import seventeen from '../../../../../public/images/seventeen.png';
 import Image from 'next/image';
 import CommunityTable from '@/components/community/CommunityTable';
 import { useParams } from 'next/navigation';
-// http://localhost:3000/artist/2/community
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
@@ -21,10 +20,17 @@ export default function CommunityPage() {
   const getPosts = async () => {
     const { data } = await supabase
       .from('posts')
-      .select('*')
+      .select(
+        `
+        *,
+        users (
+          id,
+          display_name
+        )
+      `,
+      )
       .eq('artist_id', artistId)
-      .order('created_at', { ascending: false })
-      .returns<CommunityPost[]>();
+      .order('created_at', { ascending: false });
     setPosts(data || []);
   };
 

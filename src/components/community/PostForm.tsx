@@ -6,12 +6,22 @@ import { createClient } from '@/utils/supabase/client';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-
 import { Label } from '../ui/label';
 
 type PostId = string | null;
 
-export default function PostForm() {
+export type UserInfo = {
+  userInfo: {
+    avatar_url: string | null;
+    created_at: string;
+    display_name: string | null;
+    email: string | null;
+    id: string;
+    user_name: string | null;
+  };
+};
+
+export default function PostForm({ userInfo }: UserInfo) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -45,7 +55,7 @@ export default function PostForm() {
         title,
         body: content,
         artist_id: artistId,
-        user_id: '3f4934ee-6936-4ef8-9afb-7bcf8ef43f64', //TODO - 유저정보 가져와서 넣기
+        user_id: userInfo.id, //TODO - 유저정보 가져와서 넣기
       },
     ]);
 
@@ -79,7 +89,7 @@ export default function PostForm() {
       <div className='w-[700px]'>
         <Card className='p-2 py-4'>
           <CardHeader className='mb-2'>
-            <CardTitle className='mb-2'>게시글 작성</CardTitle>
+            <CardTitle className='mb-2'>커뮤니티 글 작성</CardTitle>
             <CardDescription>My Fan Community Please feel free to enter</CardDescription>
           </CardHeader>
           <CardContent className='mb-6'>

@@ -14,7 +14,6 @@ type PostPropType = {
 export default function DetailPost({ posts, postId }: PostPropType) {
   const supabase = createClient();
   const router = useRouter();
-  // const createdDate = formatDate(posts.created_at);
 
   //TODO - 내가 쓴 글만 삭제해야함
   // 글 삭제하기
@@ -45,7 +44,7 @@ export default function DetailPost({ posts, postId }: PostPropType) {
         <CardHeader className='pt-10'>
           <CardTitle>{posts.title}</CardTitle>
           <CardDescription>
-            <Label className='mr-2'>{posts.user_id}</Label>
+            <Label className='mr-2'>{posts.users.display_name}</Label>
             <Label></Label>
           </CardDescription>
         </CardHeader>
