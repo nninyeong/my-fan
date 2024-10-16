@@ -1,41 +1,82 @@
+'use client';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CardDemo } from '@/components/shared/CardDemo';
-import { CarouselDemo } from '@/components/shared/CarouselDemo';
-import { DialogDemo } from '@/components/shared/DialogDemo';
-import UsersPage from '@/components/test/test';
-import ProfilePage from '@/components/test/test3';
-import { createClient } from '@/utils/supabase/server';
-import ProfileClient from '@/components/auth/serverAuth';
+import axios from 'axios';
 
-export default async function Home() {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getSession();
+type Group = {
+  id: string;
+  member: Array<string>;
+  debut_date: string;
+  thumbnail: string;
+};
 
-  if (error) {
-    console.error('세션을 가져오는 중 오류가 발생했습니다:', error.message);
-    return <div>세션을 가져오는 중 오류가 발생했습니다.</div>;
-  }
+export default function Home() {
+  const [artistName, setArtistName] = useState(''); // 아티스트 이름 상태
+  const [artist, setArtist] = useState([]); // 검색된 아티스트 상태
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
-  const user = data.session?.user;
-  // const meta = user?.user_metadata;
+  const fetchArtistList = async () => {
+    if (artistName.trim() === '') {
+      alert('찾고싶은 아티스트명을 입력해주세요!');
+      return; // 이름이 비어 있으면 실행 안 함
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`/api/artist`, {
+        params: { name: artistName }, // API 라우트에 쿼리 파라미터 전달
+      });
+      setArtist(response.data.data); // 받아온 데이터를 상태에 저장
+    } catch (error) {
+      console.error('Failed to fetch artist list:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <section className='grid justify-items-center min-h-screen py-8 pb-20 m-auto container'>
       <article className='flex flex-wrap flex-col gap-10 p-4'>
         <div className='txt'>
-          <h2 className='font-bold'>example</h2>
+          <h2 className='font-bold'>좋아하는 아티스트를 검색하세요!</h2>
         </div>
-        <ProfileClient user={user} />
-        <ProfilePage />
-
-        <UsersPage />
-        <Button>button</Button>
-        <Input />
-        <CardDemo />
-        <DialogDemo />
-        <CarouselDemo />
+        <Input
+          placeholder='아티스트 검색'
+          value={artistName} // 입력값을 상태와 연결
+          onChange={(e) => setArtistName(e.target.value)} // 입력값 변경 시 상태 업데이트
+        />
+        <Button onClick={fetchArtistList}>검색</Button> {/* 클릭 시 검색 실행 */}
       </article>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          {artist.length > 0 ? (
+            <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+              {artist.map((item: Group, index: number) => (
+                <li
+                  key={index}
+                  className='bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer'
+                >
+                  <div className='p-4'>
+                    <img
+                      src={item.thumbnail}
+                      alt='Artist Thumbnail'
+                      className='w-full h-auto object-cover rounded-t-lg '
+                    />
+                  </div>
+                  <div className='p-4 text-center'>
+                    <p className='text-xl font-bold'>{item.id}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>해당 아티스트가 없습니다!</p>
+          )}
+        </div>
+      )}
     </section>
   );
 }
