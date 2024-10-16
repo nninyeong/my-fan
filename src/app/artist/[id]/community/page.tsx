@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 import CommunityTable from '@/components/community/CommunityTable';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CommunityPage({ params }: { params: { id: string } }) {
