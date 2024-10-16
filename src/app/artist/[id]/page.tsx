@@ -3,39 +3,69 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Groups } from '@/lib/type/artist';
+import { useParams } from 'next/navigation';
 
 export default function Page() {
-  const [currentIndex, setCurrentIndex] = useState(0); // 캐러셀 위치 상태 관리
-  const [largeImageSrc, setLargeImageSrc] = useState(images[0]); // 큰 이미지 상태 관리
-  const itemsPerView = 7; // 한 번에 보이는 이미지 수
-
-  const [groups, setGroups] = useState<Groups[] | null>(null);
+  const [artist, setArtist] = useState<Groups[] | null>(null);
+  const [groups, setGroup] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]); // 이미지 URL 상태
-  const [names, setNames] = useState<string[]>([]); // 이미지 이름 상태
+  const [names, setNames] = useState<string[]>([]); // artist 이름 상태
+  const [birthday, setArtistBirthday] = useState<string[]>([]); // artist 생일 상태
+
+  const [currentIndex, setCurrentIndex] = useState(0); // 캐러셀 위치 상태 관리
+  const [largeImageSrc, setLargeImageSrc] = useState<string>(''); // 큰 이미지 상태 관리
+  const itemsPerView = 7; // 한 번에 보이는 이미지 수
 
   const supabase = createClient();
 
+  const { id } = useParams();
+
+  const urlId = decodeURIComponent(id);
+
   useEffect(() => {
-    getGroups();
-  }, []);
-
-  async function getGroups() {
-    const { data } = await supabase.from('group_artists').select('*');
-
-    setGroups(data);
-    if (data) {
-      setGroups(data);
-      // 이미지 URL과 이름을 데이터에서 추출
-      const imageUrls = data.map((group) => group.imageUrl); // imageUrl 컬럼에서 URL 추출
-      const imageNames = data.map((group) => group.member.); // name 컬럼에서 이름 추출
-
-      setImages(imageUrls);
-      setNames(imageNames);
-      setLargeImageSrc(imageUrls[0]); // 첫 번째 이미지로 초기화
+    if (id) {
+      getGroups(urlId as string); // id가 있을 경우 그룹 정보 가져오기
     }
+  }, [id]); // id가 변경될 때마다 실행
 
-    console.log(data);
+  // id에 맞는 artist 정보 가져오기
+  async function getGroups(groupId: string) {
+    try {
+      const { data, error } = await supabase.from('artists').select('*').eq(`group`, groupId); // URL의 id를 사용하여 그룹 조회해야함
+
+      console.log(groupId);
+
+      if (error) {
+        console.error('Error fetching data:', error);
+        return;
+      }
+
+      setArtist(data);
+
+      console.log(data);
+
+      const artistGroup = data?.map((element) => element.group) || [];
+      setGroup(artistGroup);
+
+      const imageUrls = data?.map((element) => element.image) || [];
+      setImages(imageUrls);
+
+      const artistName = data?.map((element) => element.name) || [];
+      setNames(artistName);
+
+      const artistBirthday = data?.map((element) => element.birthday) || [];
+      setArtistBirthday(artistBirthday);
+
+      if (imageUrls.length > 0) {
+        setLargeImageSrc(imageUrls[0]); // 첫 번째 이미지를 초기값으로 설정
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
   }
+
+  // console.log(groups);
+  // console.log(images);
 
   // 캐러셀 이동 및 처음 이지미에서 멈춤
   const handlePrev = () => {
@@ -55,7 +85,7 @@ export default function Page() {
   return (
     <div className='flex flex-col items-center min-h-screen bg-gray-100'>
       <div className='p-4'>
-        <Image
+        <img
           src={largeImageSrc}
           alt='Large Image'
           width={1200}
@@ -85,7 +115,7 @@ export default function Page() {
                 className='min-w-[14.2857%] p-2 relative'
                 key={index}
               >
-                <Image
+                <img
                   className='w-full h-44 rounded-md shadow-md'
                   src={src}
                   alt={`Small Image ${index + 1}`}
@@ -97,8 +127,11 @@ export default function Page() {
                   className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg opacity-0 transition-opacity duration-300 hover:opacity-100'
                   onClick={() => handleImageClick(index)} // 이미지 클릭 시 큰 이미지 변경
                 >
-                  {name[index]}
+                  {names[index]}
                 </div>
+                <div>이름 : {names[index]}</div>
+                <div>생일 : {birthday[index]}</div>
+                <div>소속 :{groups[index]} </div>
               </div>
             ))}
           </div>
