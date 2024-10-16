@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChangeUserInfo } from '@/components/mypage/ChangeUserInfo';
 import { ChangeImage } from '@/components/mypage/ChangeImage';
 import { UserInfo } from '@/components/mypage/UserInfo';
-import Loading from './loading';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
+import Loading from './loading';
 
 export interface ChangeUserInfoProps {
   formData: {
