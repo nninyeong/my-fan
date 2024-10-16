@@ -9,7 +9,7 @@ export const scheduleSchema = z.object({
     .refine((d) => d !== null, {
       message: '날짜는 필수 항목입니다.',
     }),
-  content: z.string().optional(),
+  content: z.string().nullable(),
 });
 
 export type ScheduleFormValues = z.infer<typeof scheduleSchema>;
