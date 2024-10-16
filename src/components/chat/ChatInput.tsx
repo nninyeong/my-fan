@@ -1,7 +1,6 @@
 'use client';
 
-import { Imessage } from '@/lib/type/type';
-import { useMessage } from '@/lib/stores/useMessagesStore';
+import { Imessage, useMessage } from '@/lib/stores/useMessagesStore';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import browserClient from '@/utils/supabase/client';
 import { Input } from '@/components/ui/input';
@@ -9,10 +8,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
 export default function ChatInput() {
-  const supabase = browserClient;
   const user = useAuthStore((state) => state.user);
   const addMessage = useMessage((state) => state.addMessage);
   const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
+
+  const supabase = browserClient;
 
   const handleSendMessage = async (text: string) => {
     if (text.trim()) {
@@ -25,10 +25,8 @@ export default function ChatInput() {
         created_at: new Date().toDateString(),
         users: {
           id: user?.id,
-          avatar_url: user?.user_metadata.avatar_url,
+          ...user?.user_metadata,
           created_at: new Date().toDateString(),
-          display_name: user?.user_metadata.user_name,
-          email: user?.user_metadata.email,
         },
       };
 

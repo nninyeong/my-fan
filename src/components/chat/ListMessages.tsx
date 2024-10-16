@@ -23,6 +23,7 @@ export default function ListMessages() {
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
         if (!optimisticIds.includes(payload.new.id)) {
           const { data, error } = await supabase.from('users').select('*').eq('id', payload.new.send_by).single();
+
           if (error) {
             toast.error(error.message);
           } else {

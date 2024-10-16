@@ -9,27 +9,27 @@ export type Database = {
           id: string;
           is_edit: boolean;
           send_by: string;
-          text: boolean;
+          text: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
-          is_edit: boolean;
+          is_edit?: boolean;
           send_by?: string;
-          text: boolean;
+          text: string;
         };
         Update: {
           created_at?: string;
           id?: string;
           is_edit?: boolean;
           send_by?: string;
-          text?: boolean;
+          text?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'messages_id_fkey';
-            columns: ['id'];
-            isOneToOne: true;
+            foreignKeyName: 'messages_send_by_fkey';
+            columns: ['send_by'];
+            isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
           },

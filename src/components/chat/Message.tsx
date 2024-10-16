@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import MessageMenu from './MessageMenu';
-import { Imessage } from '@/lib/type/type';
+import { Imessage } from '@/lib/stores/useMessagesStore';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 
 export default function Message({ message }: { message: Imessage }) {

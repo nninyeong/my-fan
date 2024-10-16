@@ -14,6 +14,6 @@ export type Imessage = {
   id: string;
   is_edit: boolean;
   send_by: string;
-  text: string;
+  text?: string;
   users: UsersData | null;
 };
