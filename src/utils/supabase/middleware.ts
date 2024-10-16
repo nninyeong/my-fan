@@ -40,6 +40,7 @@ export const updateSession = async (request: NextRequest) => {
     // 여기로 온 경우, Supabase 클라이언트를 생성하지 못한 것입니다!
     // 이는 환경 변수가 설정되지 않았기 때문일 가능성이 큽니다.
     // 다음 단계에 대한 정보를 보려면 http://localhost:3000을 확인하세요.
+    console.error(error);
     return NextResponse.next({
       request: {
         headers: request.headers,

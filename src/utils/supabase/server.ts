@@ -21,6 +21,7 @@ export const createClient = () => {
           } catch (error) {
             // `set` 메서드가 서버 컴포넌트에서 호출되었습니다.
             // 만약 세션 갱신을 위한 미들웨어가 있다면 이 오류는 무시해도 됩니다.
+            console.error(error);
           }
         },
       },
