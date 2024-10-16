@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -21,7 +22,6 @@ export default function Page() {
   const [formData, setFormData] = useState({
     email: user ? user.email : '',
     nickname: user ? user?.user_metadata.display_name || user?.user_metadata.user_name : '',
-    // || user?.user_metadata?.username
   });
 
   useEffect(() => {
@@ -41,33 +41,40 @@ export default function Page() {
       return;
     }
 
-    // const { data, error } = await supabase
-    //   .from('users')
-    //   .update({
-    //     display_name: formData.nickname,
-    //     user_name: formData.nickname,
-    //     username: formData.nickname,
-    //   })
-    //   .eq('id', user.id)
-    //   .select();
-
-    const { data, error } = await supabase.auth.updateUser({
+    // 1. Supabase auth 메타데이터 업데이트
+    const { error: authError } = await supabase.auth.updateUser({
       data: {
-        ...user.user_metadata,
         display_name: formData.nickname,
         user_name: formData.nickname,
         username: formData.nickname,
       },
     });
 
-    if (error) {
-      toast.error('닉네임 업데이트 중 오류가 발생했습니다.'); // 오류 알림
-      console.error('사용자 테이블에서 닉네임 업데이트 중 오류 발생:', error);
+    if (authError) {
+      toast.error('닉네임 업데이트 중 오류가 발생했습니다.');
+      console.error('Auth 메타데이터 업데이트 오류 발생:', authError);
       return;
     }
 
-    toast.success('닉네임이 성공적으로 업데이트되었습니다.'); // 성공 알림
-    console.log('사용자 닉네임 업데이트 성공:', data);
+    // 2. 'users' 테이블 업데이트
+    const { error: tableError } = await supabase
+      .from('users')
+      .update({
+        display_name: formData.nickname,
+        user_name: formData.nickname,
+        username: formData.nickname,
+      })
+      .eq('id', user.id);
+
+    if (tableError) {
+      toast.error('사용자 테이블 업데이트 중 오류가 발생했습니다.');
+      console.error('사용자 테이블 업데이트 오류:', tableError);
+      return;
+    }
+
+    toast.success('닉네임이 성공적으로 업데이트되었습니다.');
+
+    // 상태 업데이트
     setUser({
       ...user,
       user_metadata: {
@@ -77,6 +84,7 @@ export default function Page() {
         username: formData.nickname,
       },
     });
+
     setIsEditing(false);
   };
 
@@ -92,16 +100,18 @@ export default function Page() {
         </CardHeader>
         <CardContent>
           <div className='flex flex-col items-center space-y-1.5'>
-            <div className='w-44 h-44 rounded-full overflow-hidden m-auto'>
+            <div className='w-44 h-44 rounded-full overflow-hidden m-auto relative'>
               {user && user.user_metadata?.avatar_url ? (
                 <img
                   src={user.user_metadata.avatar_url}
                   alt='User Avatar'
+                  className='cursor-pointer'
                 />
               ) : (
                 <img
                   src={defaultImg}
                   alt='Default Image'
+                  className='cursor-pointer'
                 />
               )}
             </div>

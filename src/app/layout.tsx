@@ -45,7 +45,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} flex flex-col min-h-screen antialiased bg-background text-foreground`}>
         <ThemeProvider
           attribute='class'
-          defaultTheme='dark'
+          defaultTheme='light'
           enableSystem
           disableTransitionOnChange
         >

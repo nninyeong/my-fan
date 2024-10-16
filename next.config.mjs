@@ -6,6 +6,12 @@ const nextConfig = {
         hostname: 'avatars.githubusercontent.com',
         protocol: 'https',
       },
+      {
+        protocol: 'https',
+        hostname: 'sqeuibzetolbikvgjolr.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/avatars/**',
+      },
     ],
     domains: ['zjzxtdplbzlpmnvdrlbu.supabase.co'],
   },
