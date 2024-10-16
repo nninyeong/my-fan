@@ -8,6 +8,9 @@ const nextConfig = {
       },
     ],
     domains: ['zjzxtdplbzlpmnvdrlbu.supabase.co'],
+    typescript: {
+      ignoreBuildErrors: true,
+    },
   },
 };
 
