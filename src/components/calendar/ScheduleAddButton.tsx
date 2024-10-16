@@ -17,31 +17,17 @@ import { Calendar } from '@/components/ui/calendar';
 import { useMutateSchedule } from '@/queries/fetchSchedules';
 import { format } from 'date-fns';
 import { Plus } from 'lucide-react';
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { ko } from 'date-fns/locale';
+import { ScheduleFormValues, scheduleSchema } from '@/utils/zod/scheduleSchema';
 
 export default function ScheduleAddButton({ artistId }: { artistId: string }) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
 
   const { user } = useAuthStore((state) => state);
-
-  const scheduleSchema = z.object({
-    title: z.string().min(1, { message: '스케줄 이름을 입력해주세요.' }),
-    description: z.string().min(1, { message: '상세정보를 입력해주세요.' }),
-    date: z
-      .date({ invalid_type_error: '날짜는 Date 객체여야 합니다.' })
-      .nullable()
-      .refine((d) => d !== null, {
-        message: '날짜는 필수 항목입니다.',
-      }),
-    content: z.string().optional(),
-  });
-
-  type ScheduleFormValues = z.infer<typeof scheduleSchema>;
 
   const {
     register,
