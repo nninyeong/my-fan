@@ -3,7 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 const getInitialSchedules = async (artistId: string, startDate: string, endDate: string) => {
   const serverClient = createClient();
 
-  const { data: initialSchedules, error } = await serverClient
+  const { data: initialSchedules } = await serverClient
     .from('schedule')
     .select()
     .eq('artist_id', artistId)

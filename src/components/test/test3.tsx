@@ -1,4 +1,3 @@
-import InitUser from '@/lib/stores/InitUser';
 import { createClient } from '@/utils/supabase/server';
 
 export default async function ProfilePage() {
