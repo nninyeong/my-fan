@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Loading from './loading';
 import browserClient from '@/utils/supabase/client';
+import { toast } from 'sonner';
 
 export default function Page() {
   const [hydrated, setHydrated] = useState(false);
@@ -19,7 +20,8 @@ export default function Page() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     email: user ? user.email : '',
-    nickname: user ? user?.user_metadata.display_name || user?.user_metadata.username : '',
+    nickname: user ? user?.user_metadata.display_name || user?.user_metadata.user_name : '',
+    // || user?.user_metadata?.username
   });
 
   useEffect(() => {
@@ -34,26 +36,48 @@ export default function Page() {
   };
 
   const handleSave = async () => {
-    // user와 user.id가 undefined가 아닌지 확인
     if (!user || !user.id) {
-      console.error('사용자 또는 사용자 ID가 정의되지 않았습니다.');
+      toast.error('사용자 또는 사용자 ID가 정의되지 않았습니다.');
       return;
     }
 
-    // Supabase 'users' 테이블에서 닉네임 업데이트
-    const { data, error } = await supabase
-      .from('users') // 'users' 테이블에서
-      .update({ display_name: formData.nickname }) // 닉네임 업데이트
-      .eq('id', user.id); // 현재 로그인된 사용자 ID로 업데이트
+    // const { data, error } = await supabase
+    //   .from('users')
+    //   .update({
+    //     display_name: formData.nickname,
+    //     user_name: formData.nickname,
+    //     username: formData.nickname,
+    //   })
+    //   .eq('id', user.id)
+    //   .select();
+
+    const { data, error } = await supabase.auth.updateUser({
+      data: {
+        ...user.user_metadata,
+        display_name: formData.nickname,
+        user_name: formData.nickname,
+        username: formData.nickname,
+      },
+    });
 
     if (error) {
+      toast.error('닉네임 업데이트 중 오류가 발생했습니다.'); // 오류 알림
       console.error('사용자 테이블에서 닉네임 업데이트 중 오류 발생:', error);
       return;
     }
 
+    toast.success('닉네임이 성공적으로 업데이트되었습니다.'); // 성공 알림
     console.log('사용자 닉네임 업데이트 성공:', data);
-    setUser({ ...user, user_metadata: { ...user.user_metadata, display_name: formData.nickname } });
-    setIsEditing(false); // 수정 모드 종료
+    setUser({
+      ...user,
+      user_metadata: {
+        ...user.user_metadata,
+        display_name: formData.nickname,
+        user_name: formData.nickname,
+        username: formData.nickname,
+      },
+    });
+    setIsEditing(false);
   };
 
   if (!hydrated) {

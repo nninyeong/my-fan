@@ -112,8 +112,8 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
       options: { redirectTo: window.origin + '/auth/callback' },
     });
   }
-  // 세션 받고 인가코드 받거나 하는 거 없어? 
-  // 
+  // 세션 받고 인가코드 받거나 하는 거 없어?
+  //
   useEffect(() => {
     browserClient.auth.getSession().then(console.log);
   }, []);

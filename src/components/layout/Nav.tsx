@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Session } from '@supabase/supabase-js';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import browserClient from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Nav() {
   const router = useRouter();
@@ -19,30 +18,18 @@ export default function Nav() {
     clearAuth: state.clearAuth,
   }));
 
-  const {
-    data: session,
-    isLoading,
-    isError,
-  } = useQuery<Session | null>({
-    queryKey: ['session'],
-    queryFn: async () => {
-      const { data } = await browserClient.auth.getSession();
-      console.log('세션 데이터:', data);
-      return data.session;
-    },
-  });
-
   useEffect(() => {
     if (!hydrated) {
       setHydrated(true);
     }
 
-    if (session) {
+    // user 상태를 통해 로그인 여부를 결정
+    if (user) {
       setLogin(true);
-    } else if (isError) {
+    } else {
       setLogin(false);
     }
-  }, [session, isError, hydrated, setLogin]);
+  }, [user, hydrated, setLogin]);
 
   // 로그아웃
   const signOutMutation = useMutation({
@@ -58,7 +45,7 @@ export default function Nav() {
     },
   });
 
-  if (!hydrated || isLoading) {
+  if (!hydrated) {
     return (
       <nav>
         <ul className='flex items-center gap-4'>
@@ -109,7 +96,10 @@ export default function Nav() {
 
         {isLogin && (
           <li className='underline'>
-            <span className='font-semibold'>{user?.user_metadata?.display_name || user?.email || '사용자'}</span> 님
+            <span className='font-semibold'>
+              {user?.user_metadata?.display_name || user?.user_metadata?.user_name || '사용자'}
+            </span>{' '}
+            님
           </li>
         )}
       </ul>
