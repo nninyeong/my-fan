@@ -5,6 +5,5 @@ export type ScheduleInsert = Database['public']['Tables']['schedule']['Insert'];
 export type ScheduleUpdate = Database['public']['Tables']['schedule']['Update'];
 
 export type CalendarInitDataType = {
-  initialDate: Date;
   artistId: string;
 };

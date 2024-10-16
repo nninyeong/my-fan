@@ -12,9 +12,9 @@ type TempCalendarInitialType = CalendarInitDataType & {
   userId: string | undefined;
 };
 
-export default function ScheduleList({ artistId, initialDate, userId }: TempCalendarInitialType) {
-  let { data: schedules } = useFetchSchedules(artistId, initialDate);
-  const { selectedDate } = useScheduleStore();
+export default function ScheduleList({ artistId, userId }: TempCalendarInitialType) {
+  const { calendarDate, selectedDate } = useScheduleStore((state) => state);
+  let { data: schedules } = useFetchSchedules(artistId, calendarDate);
 
   if (selectedDate && schedules) {
     schedules = schedules.filter((schedule) => isSameDay(selectedDate, schedule.date));

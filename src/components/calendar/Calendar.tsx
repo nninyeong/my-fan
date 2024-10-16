@@ -2,7 +2,6 @@
 
 import { CalendarInitDataType } from '@/lib/type/scheduleTypes';
 import { getDaysInMonth } from 'date-fns';
-import { useState } from 'react';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { cn } from '@/lib/utils';
@@ -17,13 +16,12 @@ type TempClanedarInitType = CalendarInitDataType & {
   userId: string | undefined;
 };
 
-export default function Calendar({ initialDate, artistId, userId }: TempClanedarInitType) {
-  const [calendarDate, setCalendarDate] = useState<Date>(initialDate);
+export default function Calendar({ artistId, userId }: TempClanedarInitType) {
+  const { calendarDate, selectedDate, selectDate } = useScheduleStore((state) => state);
   const daysInMonth = getDaysInMonth(calendarDate);
   const firstDay = getFirstDayOfMonth(calendarDate);
 
   const { data: schedules, year, month } = useFetchSchedules(artistId, calendarDate);
-  const { selectedDate, selectDate } = useScheduleStore();
 
   const handleToggleDate = (date: number) => {
     if (selectedDate === date) {
@@ -37,19 +35,11 @@ export default function Calendar({ initialDate, artistId, userId }: TempClanedar
     <div className='flex flex-col justify-center items-center w-full'>
       <div className='grid grid-cols-5 w-full mb-8'>
         <div className='col-start-2 col-end-5 flex gap-3 justify-center items-center'>
-          <CalendarControllBotton
-            mode='previous'
-            calendarDate={calendarDate}
-            setCalendarDate={setCalendarDate}
-          />
+          <CalendarControllBotton mode='previous' />
           <h2 className='text-center'>
             {year} . {month}
           </h2>
-          <CalendarControllBotton
-            mode='next'
-            calendarDate={calendarDate}
-            setCalendarDate={setCalendarDate}
-          />
+          <CalendarControllBotton mode='next' />
         </div>
         <AddScheduleButton
           artistId={artistId}

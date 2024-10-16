@@ -36,13 +36,11 @@ export default async function page({ params }: { params: { id: string } }) {
         <div className='border p-5 w-[900px]'>
           <h3>{artistId}</h3>
           <Calendar
-            initialDate={today}
             artistId={artistId}
             userId={userId}
           />
         </div>
         <ScheduleList
-          initialDate={today}
           artistId={artistId}
           userId={userId}
         />
