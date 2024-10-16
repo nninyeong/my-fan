@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { Groups } from '@/lib/type/artist';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 export default function Page() {
-  const [artist, setArtist] = useState<Groups[] | null>(null);
   const [groups, setGroup] = useState<string[]>([]); // artist 그룹 상태
   const [images, setImages] = useState<string[]>([]); // artist 이미지 URL 상태
   const [names, setNames] = useState<string[]>([]); // artist 이름 상태
@@ -42,8 +40,6 @@ export default function Page() {
         console.error('Error fetching data:', error);
         return;
       }
-
-      setArtist(data);
 
       const artistGroup =
         data?.map((element) => element.group).filter((group): group is string => group !== null) || [];
