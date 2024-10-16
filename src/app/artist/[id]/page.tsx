@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Groups } from '@/lib/type/artist';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function Page() {
   const [artist, setArtist] = useState<Groups[] | null>(null);
@@ -142,7 +144,14 @@ export default function Page() {
           &#9654;
         </button>
       </div>
-      <div></div>
+      <div className='flex gap-5 mt-20'>
+        <Link href={`/artist/${urlId}/community`}>
+          <Button>커뮤니티</Button>
+        </Link>
+        <Link href={`/artist/${urlId}/schedule`}>
+          <Button>스케쥴</Button>
+        </Link>
+      </div>
     </div>
   );
 }
