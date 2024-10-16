@@ -26,15 +26,9 @@ export default async function page({ params }: { params: { id: string } }) {
       <div className='flex justify-center items-start gap-10 w-full mt-14'>
         <div className='border p-5 w-[900px]'>
           <h3 className='font-bold'>{artistId} 스케줄</h3>
-          <Calendar
-            artistId={artistId}
-            userId={userId}
-          />
+          <Calendar artistId={artistId} />
         </div>
-        <ScheduleList
-          artistId={artistId}
-          userId={userId}
-        />
+        <ScheduleList artistId={artistId} />
       </div>
     </HydrationBoundary>
   );

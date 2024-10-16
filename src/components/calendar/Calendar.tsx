@@ -1,6 +1,5 @@
 'use client';
 
-import { CalendarInitDataType } from '@/lib/type/scheduleTypes';
 import { getDaysInMonth } from 'date-fns';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
