@@ -6,8 +6,9 @@ import { createClient } from '@/utils/supabase/client';
 import { useParams } from 'next/navigation';
 import { Comments } from '@/lib/type/CommunityTypes';
 import { Input } from '../ui/input';
+import { UserInfo } from './PostForm';
 
-export default function Comment() {
+export default function Comment({ userInfo }: UserInfo) {
   const supabase = createClient();
   const [comments, setComments] = useState<Comments[]>([]);
   const [comment, setComment] = useState('');
@@ -15,20 +16,22 @@ export default function Comment() {
 
   //아티스트, 글 id
   const value = useParams<{ id: string; postId: string }>();
-  const artistId = value.id;
   const postId = value.postId;
+  const id = value.id;
+  const artistId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
   // 댓글 등록
   const handleCommentInsert = async () => {
-    const { data, error } = await supabase
-      .from('comments')
-      .insert({
-        post_id: postId,
-        content_text: comment,
-        artist_id: artistId,
-        user_id: '3f4934ee-6936-4ef8-9afb-7bcf8ef43f64', //TODO - 유저정보 가져와서 넣기
-      })
-      .select(); // **댓글을 데이터베이스에 추가한 후, 데이터 받아오기!
+    const { data, error } = await supabase.from('comments').insert({
+      post_id: postId,
+      content_text: comment,
+      artist_id: artistId,
+      user_id: userInfo.id,
+    }).select(`
+      id, content_text, created_at, users (
+        id, display_name
+      )
+    `); // **댓글을 데이터베이스에 추가한 후, 데이터 받아오기!
 
     if (error) {
       console.error('댓글 작성 오류', error.message);
@@ -40,7 +43,19 @@ export default function Comment() {
 
   //해당 아티스트 및 게시글 댓글 불러오기
   const getComments = async (postId: string) => {
-    const { data, error } = await supabase.from('comments').select('*').eq('post_id', postId).order('created_at');
+    const { data, error } = await supabase
+      .from('comments')
+      .select(
+        `
+    *,
+    users (
+      id,
+      display_name
+    )
+  `,
+      )
+      .eq('post_id', postId)
+      .order('created_at');
     setComments(data || []);
 
     if (error) {
@@ -103,6 +118,7 @@ export default function Comment() {
   useEffect(() => {
     getComments(postId);
   }, []);
+
   return (
     <div className='mt-10'>
       <div className='flex gap-2'>
@@ -133,9 +149,7 @@ export default function Comment() {
               className='border-t-2 pt-4 mt-4 mb-8'
             >
               <div className='flex gap-4 justify-between'>
-                {/* //TODO - comment테이블과 유저테이블 조인해서 유저에있는 display_name 가져오기 */}
-                <div>{comment.user_id}</div>
-                {/* //TODO - 댓글 쓴 유저만 버튼 보이게 */}
+                <div>{comment.users?.display_name || 'Unknown User'}</div>
                 <div>
                   <Button
                     variant='outline'
@@ -170,7 +184,6 @@ export default function Comment() {
               </div>
               <div className='flex gap-2'>
                 <p className='py-2 text-gray-400'>{comment.created_at}</p>
-                {/* <button>답글 쓰기</button> */}
               </div>
             </li>
           ))}
