@@ -3,6 +3,107 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      artists: {
+        Row: {
+          birthday: string;
+          group: string | null;
+          id: number;
+          image: string;
+          name: string;
+        };
+        Insert: {
+          birthday: string;
+          group?: string | null;
+          id?: number;
+          image: string;
+          name: string;
+        };
+        Update: {
+          birthday?: string;
+          group?: string | null;
+          id?: number;
+          image?: string;
+          name?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'artists_group_fkey';
+            columns: ['group'];
+            isOneToOne: false;
+            referencedRelation: 'groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      comments: {
+        Row: {
+          artist_id: string | null;
+          content_text: string | null;
+          created_at: string;
+          edit_comment: boolean | null;
+          id: string;
+          parent_comment_id: number | null;
+          post_id: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          artist_id?: string | null;
+          content_text?: string | null;
+          created_at?: string;
+          edit_comment?: boolean | null;
+          id?: string;
+          parent_comment_id?: number | null;
+          post_id?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          artist_id?: string | null;
+          content_text?: string | null;
+          created_at?: string;
+          edit_comment?: boolean | null;
+          id?: string;
+          parent_comment_id?: number | null;
+          post_id?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'comments_post_id_fkey';
+            columns: ['post_id'];
+            isOneToOne: false;
+            referencedRelation: 'posts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'comments_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      groups: {
+        Row: {
+          debut_date: string;
+          id: string;
+          members: Json | null;
+          thumbnail: string;
+        };
+        Insert: {
+          debut_date: string;
+          id: string;
+          members?: Json | null;
+          thumbnail: string;
+        };
+        Update: {
+          debut_date?: string;
+          id?: string;
+          members?: Json | null;
+          thumbnail?: string;
+        };
+        Relationships: [];
+      };
       messages: {
         Row: {
           created_at: string;
@@ -16,7 +117,7 @@ export type Database = {
           id?: string;
           is_edit?: boolean;
           send_by?: string;
-          text: string;
+          text?: string;
         };
         Update: {
           created_at?: string;
@@ -29,6 +130,41 @@ export type Database = {
           {
             foreignKeyName: 'messages_send_by_fkey';
             columns: ['send_by'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      posts: {
+        Row: {
+          artist_id: string;
+          body: string;
+          created_at: string;
+          id: string;
+          title: string;
+          user_id: string | null;
+        };
+        Insert: {
+          artist_id: string;
+          body: string;
+          created_at?: string;
+          id?: string;
+          title: string;
+          user_id?: string | null;
+        };
+        Update: {
+          artist_id?: string;
+          body?: string;
+          created_at?: string;
+          id?: string;
+          title?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'posts_user_id_fkey';
+            columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
@@ -113,6 +249,7 @@ export type Database = {
           display_name: string | null;
           email: string | null;
           id: string;
+          user_name: string | null;
         };
         Insert: {
           avatar_url?: string | null;
@@ -120,6 +257,7 @@ export type Database = {
           display_name?: string | null;
           email?: string | null;
           id: string;
+          user_name?: string | null;
         };
         Update: {
           avatar_url?: string | null;
@@ -127,6 +265,7 @@ export type Database = {
           display_name?: string | null;
           email?: string | null;
           id?: string;
+          user_name?: string | null;
         };
         Relationships: [];
       };
