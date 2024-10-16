@@ -1,16 +1,34 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChangeUserInfo } from '@/components/mypage/ChangeUserInfo';
+import Loading from './loading';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { AVATAR_URL } from '@/lib/constants/constants';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ChangeNickname from '@/components/mypage/ChangeNickname';
-import Loading from './loading';
+
+export interface ChangeUserInfoProps {
+  formData: {
+    email: string;
+    nickname: string;
+  };
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      email: string;
+      nickname: string;
+    }>
+  >;
+}
 
 export default function Page() {
   const [hydrated, setHydrated] = useState(false);
   const { user } = useAuthStore();
   const defaultImg = AVATAR_URL;
+
+  const [formData, setFormData] = useState({
+    email: user?.email || '',
+    nickname: user?.user_metadata?.display_name || user?.user_metadata?.user_name || '', 
+  });
 
   useEffect(() => {
     setHydrated(true);
@@ -43,13 +61,15 @@ export default function Page() {
                 />
               )}
             </div>
-
-            <ChangeNickname />
+            <ChangeUserInfo
+              formData={formData}
+              setFormData={setFormData}
+            />
           </div>
         </CardContent>
       </Card>
 
-      <div className=''>
+      <div>
         <p>사용자 정보: {user ? user.email : '로그인 필요'}</p>
         <p>
           사용자 메타데이터:{' '}
