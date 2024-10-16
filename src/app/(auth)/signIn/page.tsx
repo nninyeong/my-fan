@@ -3,18 +3,18 @@
 import Link from 'next/link';
 import AuthForm from '@/components/auth/AuthForm';
 
-export default function page() {
+export default function Page() {
   return (
     <div className='flex flex-col items-center mt-24 justify-center'>
-      <AuthForm isSignUp={false} />
+      <AuthForm mode="signIn" />
 
       <div className='mt-4 text-center text-sm'>
-        Would you like to sign up?{' '}
+        Don't have an account?{' '}
         <Link
           href='/signUp'
           className='underline'
         >
-          Sign Up
+          Sign up
         </Link>
       </div>
     </div>

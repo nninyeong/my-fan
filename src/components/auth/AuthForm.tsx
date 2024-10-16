@@ -39,14 +39,14 @@ const loginSchema = z.object({
   password: z.string().min(4, '비밀번호는 최소 4자 이상이어야 합니다.'),
 });
 
-export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
+export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
   const setLogin = useAuthStore((state) => state.setLogin);
   const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
 
   // useForm 훅 form 객체 생성
   const form = useForm({
-    resolver: zodResolver(isSignUp ? signUpSchema : loginSchema),
+    resolver: zodResolver(mode === 'signUp' ? signUpSchema : loginSchema),
     defaultValues: {
       username: '',
       email: '',
@@ -59,11 +59,10 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
   const onSubmit = async (formData: SignUpFormData | LoginFormData) => {
     console.log('formData:', formData);
 
-    if (isSignUp) {
+    if (mode === 'signUp') {
       const signUpData = formData as SignUpFormData;
       const { email, password, username } = signUpData;
 
-      // Supabase로 회원가입 시도
       const { data, error } = await browserClient.auth.signUp({
         email,
         password,
@@ -122,9 +121,11 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
     <>
       <Card className='w-[400px]'>
         <CardHeader>
-          <CardTitle className='text-2xl'>{isSignUp ? 'Sign Up' : 'Sign In'}</CardTitle>
+          <CardTitle className='text-2xl'>{mode === 'signUp' ? 'Sign Up' : 'Sign In'}</CardTitle>
           <CardDescription>
-            {isSignUp ? 'Enter your email below to create your account' : 'Enter your email and password to log in'}
+            {mode === 'signUp'
+              ? 'Enter your email below to create your account'
+              : 'Enter your email and password to log in'}
           </CardDescription>
         </CardHeader>
 
@@ -136,7 +137,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
               className='space-y-8'
             >
               <div className='grid w-full items-center gap-4'>
-                {isSignUp && (
+                {mode === 'signUp' && (
                   <FormField
                     control={form.control}
                     name='username'
@@ -190,7 +191,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
                   )}
                 />
 
-                {isSignUp && (
+                {mode === 'signUp' && (
                   <FormField
                     control={form.control}
                     name='passwordCheck'
@@ -215,7 +216,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
                 className='w-full'
                 type='submit'
               >
-                {isSignUp ? 'Create account' : 'Sign In'}
+                {mode === 'signUp' ? 'Create account' : 'Sign In'}
               </Button>
             </form>
           </Form>
@@ -238,7 +239,7 @@ export default function AuthForm({ isSignUp }: { isSignUp: boolean }) {
             onClick={signInWithGithub}
           >
             <Github size={18} />
-            {isSignUp ? 'Sign up with GitHub' : 'Sign in with GitHub'}
+            {mode === 'signUp' ? 'Sign up with GitHub' : 'Sign in with GitHub'}
           </Button>
         </CardFooter>
       </Card>
