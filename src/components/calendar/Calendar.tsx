@@ -85,7 +85,7 @@ export default function Calendar({ initialDate, artistId, userId }: TempClanedar
                       return (
                         <div
                           key={schedule.id}
-                          className='bg-svt-rosequartz/50 rounded font-bold p-2 text-gray-700 leading-[12px] text-[12px]'
+                          className='bg-svt-rosequartz/50 rounded font-bold py-[5px] px-3 text-gray-700 leading-[12px] text-[12px]'
                         >
                           {schedule.title}
                         </div>
