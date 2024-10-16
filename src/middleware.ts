@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     const isLogin = await getIsLogin();
 
     if (!isLogin) {
-      return NextResponse.redirect(new URL('/sign-in', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
