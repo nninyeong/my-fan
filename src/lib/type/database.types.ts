@@ -3,6 +3,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+<<<<<<< HEAD
       artists: {
         Row: {
           birthday: string;
@@ -159,26 +160,39 @@ export type Database = {
         };
         Relationships: [];
       };
+=======
+>>>>>>> 715a1001a41f99425649a260b9ae9674e3f6334b
       messages: {
         Row: {
           created_at: string;
           id: string;
           is_edit: boolean;
           send_by: string;
+<<<<<<< HEAD
           text: string;
+=======
+          text: boolean;
+>>>>>>> 715a1001a41f99425649a260b9ae9674e3f6334b
         };
         Insert: {
           created_at?: string;
           id?: string;
+<<<<<<< HEAD
           is_edit?: boolean;
           send_by?: string;
           text: string;
+=======
+          is_edit: boolean;
+          send_by?: string;
+          text: boolean;
+>>>>>>> 715a1001a41f99425649a260b9ae9674e3f6334b
         };
         Update: {
           created_at?: string;
           id?: string;
           is_edit?: boolean;
           send_by?: string;
+<<<<<<< HEAD
           text?: string;
         };
         Relationships: [
@@ -186,11 +200,21 @@ export type Database = {
             foreignKeyName: 'messages_send_by_fkey';
             columns: ['send_by'];
             isOneToOne: false;
+=======
+          text?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'messages_id_fkey';
+            columns: ['id'];
+            isOneToOne: true;
+>>>>>>> 715a1001a41f99425649a260b9ae9674e3f6334b
             referencedRelation: 'users';
             referencedColumns: ['id'];
           },
         ];
       };
+<<<<<<< HEAD
       posts: {
         Row: {
           artist_id: number;
@@ -253,6 +277,38 @@ export type Database = {
           price?: number | null;
           title?: string | null;
           user_id?: number | null;
+=======
+      profiles: {
+        Row: {
+          avatar_url: string | null;
+          display_name: string | null;
+          email: string | null;
+          full_name: string | null;
+          id: string;
+          updated_at: string | null;
+          username: string | null;
+          website: string | null;
+        };
+        Insert: {
+          avatar_url?: string | null;
+          display_name?: string | null;
+          email?: string | null;
+          full_name?: string | null;
+          id: string;
+          updated_at?: string | null;
+          username?: string | null;
+          website?: string | null;
+        };
+        Update: {
+          avatar_url?: string | null;
+          display_name?: string | null;
+          email?: string | null;
+          full_name?: string | null;
+          id?: string;
+          updated_at?: string | null;
+          username?: string | null;
+          website?: string | null;
+>>>>>>> 715a1001a41f99425649a260b9ae9674e3f6334b
         };
         Relationships: [];
       };
@@ -296,6 +352,7 @@ export type Database = {
       };
       users: {
         Row: {
+<<<<<<< HEAD
           avatar_url: string;
           created_at: string;
           display_name: string;
@@ -314,6 +371,26 @@ export type Database = {
           created_at?: string;
           display_name?: string;
           email?: string;
+=======
+          avatar_url: string | null;
+          created_at: string;
+          display_name: string | null;
+          email: string | null;
+          id: string;
+        };
+        Insert: {
+          avatar_url?: string | null;
+          created_at?: string;
+          display_name?: string | null;
+          email?: string | null;
+          id: string;
+        };
+        Update: {
+          avatar_url?: string | null;
+          created_at?: string;
+          display_name?: string | null;
+          email?: string | null;
+>>>>>>> 715a1001a41f99425649a260b9ae9674e3f6334b
           id?: string;
         };
         Relationships: [];
