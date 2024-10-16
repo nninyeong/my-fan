@@ -21,7 +21,7 @@ export default function ScheduleList({ artistId, initialDate, userId }: TempCale
   }
 
   return (
-    <div className='border w-[300px] h-[650px] overflow-auto flex flex-col jusfity-start items-center gap-3 p-3'>
+    <div className='border w-[300px] h-[670px] overflow-auto flex flex-col jusfity-start items-center gap-3 p-3'>
       {schedules && schedules.length > 0 ? (
         schedules.map((schedule: Schedule) => (
           <div

@@ -31,8 +31,8 @@ export default async function page({ params }: { params: { id: string } }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className='flex justify-center items-center gap-10 w-full mt-14'>
-        <div className='border p-5 w-[900px] h-[650px]'>
+      <div className='flex justify-center items-start gap-10 w-full mt-14'>
+        <div className='border p-5 w-[900px]'>
           <h3>{artistId}</h3>
           <Calendar
             initialDate={today}

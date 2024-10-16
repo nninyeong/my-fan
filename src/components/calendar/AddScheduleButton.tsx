@@ -117,12 +117,13 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
               >
                 스케줄 이름 *
               </Label>
-              <Input
-                id='title'
-                {...register('title')}
-                className='col-span-3'
-              />
-              {errors.title && <p className='text-red-500'>{errors.title.message}</p>}
+              <div className='flex flex-col col-span-3'>
+                <Input
+                  id='title'
+                  {...register('title')}
+                />
+                {errors.title && <p className='text-red-500'>{errors.title.message}</p>}
+              </div>
             </div>
             <div className='grid grid-cols-4 items-center gap-5'>
               <Label
@@ -149,13 +150,14 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
               >
                 상세 정보 *
               </Label>
-              <Input
-                id='description'
-                placeholder='장소, 시간 등 정보를 입력해주세요'
-                className='col-span-3'
-                {...register('description')}
-              />
-              {errors.description && <p className='text-red-500'>{errors.description.message}</p>}
+              <div className='flex flex-col col-span-3'>
+                <Input
+                  id='description'
+                  placeholder='장소, 시간 등 정보를 입력해주세요'
+                  {...register('description')}
+                />
+                {errors.description && <p className='text-red-500'>{errors.description.message}</p>}
+              </div>
             </div>
             <div className='grid grid-cols-4 items-center gap-5'>
               <Label
@@ -164,13 +166,14 @@ export default function AddScheduleButton({ artistId, userId }: { artistId: stri
               >
                 상세 설명
               </Label>
-              <Input
-                id='content'
-                placeholder='자세한 설명을 입력해주세요'
-                className='col-span-3'
-                {...register('content')}
-              />
-              {errors.content && <p className='text-red-500'>{errors.content.message}</p>}
+              <div className='flex flex-col col-span-3'>
+                <Input
+                  id='content'
+                  placeholder='자세한 설명을 입력해주세요'
+                  {...register('content')}
+                />
+                {errors.content && <p className='text-red-500'>{errors.content.message}</p>}
+              </div>
             </div>
           </div>
           <DialogFooter>

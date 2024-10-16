@@ -34,8 +34,8 @@ export default function Calendar({ initialDate, artistId, userId }: TempClanedar
   };
 
   return (
-    <div className='flex flex-col gap-3 justify-center items-center w-full'>
-      <div className='grid grid-cols-5 w-full'>
+    <div className='flex flex-col justify-center items-center w-full'>
+      <div className='grid grid-cols-5 w-full mb-8'>
         <div className='col-start-2 col-end-5 flex gap-3 justify-center items-center'>
           <CalendarControllBotton
             mode='previous'
