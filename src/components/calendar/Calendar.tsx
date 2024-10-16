@@ -7,14 +7,22 @@ import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { cn } from '@/lib/utils';
 import { getFirstDayOfMonth, isSameDay } from '@/utils/calendar/calendarUtils';
+import AddScheduleButton from '@/components/calendar/AddScheduleButton';
+import CalendarControllBotton from '@/components/calendar/CalendarControllBotton';
 
 const DAYS: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
-export default function Calendar({ initialDate, artistId }: CalendarInitDataType) {
-  const [daysInMonth, setDaysInMonth] = useState<number>(getDaysInMonth(initialDate));
-  const [firstDay, setFirstDay] = useState<number>(getFirstDayOfMonth(initialDate));
+// TODO: zustand에 userId 세팅 후에는 CalendarInitDataType으로만 prop type 지정
+type TempClanedarInitType = CalendarInitDataType & {
+  userId: string | undefined;
+};
 
-  const { data: schedules, year, month } = useFetchSchedules(artistId, initialDate);
+export default function Calendar({ initialDate, artistId, userId }: TempClanedarInitType) {
+  const [calendarDate, setCalendarDate] = useState<Date>(initialDate);
+  const daysInMonth = getDaysInMonth(calendarDate);
+  const firstDay = getFirstDayOfMonth(calendarDate);
+
+  const { data: schedules, year, month } = useFetchSchedules(artistId, calendarDate);
   const { selectedDate, selectDate } = useScheduleStore();
 
   const handleToggleDate = (date: number) => {
@@ -26,10 +34,28 @@ export default function Calendar({ initialDate, artistId }: CalendarInitDataType
   };
 
   return (
-    <div className='flex flex-col justify-center items-center w-full'>
-      <h2>
-        {year} . {month}
-      </h2>
+    <div className='flex flex-col gap-3 justify-center items-center w-full'>
+      <div className='grid grid-cols-5 w-full'>
+        <div className='col-start-2 col-end-5 flex gap-3 justify-center items-center'>
+          <CalendarControllBotton
+            mode='previous'
+            calendarDate={calendarDate}
+            setCalendarDate={setCalendarDate}
+          />
+          <h2 className='text-center'>
+            {year} . {month}
+          </h2>
+          <CalendarControllBotton
+            mode='next'
+            calendarDate={calendarDate}
+            setCalendarDate={setCalendarDate}
+          />
+        </div>
+        <AddScheduleButton
+          artistId={artistId}
+          userId={userId}
+        />
+      </div>
       <div className='grid grid-cols-7 w-full text-center'>
         {DAYS.map((day, index) => {
           return <div key={`${index}day`}>{day}</div>;
@@ -44,7 +70,7 @@ export default function Calendar({ initialDate, artistId }: CalendarInitDataType
             <div
               key={`date-${index}`}
               className={cn(
-                'flex flex-col gap-1 p-1 overflow-hidden border bg-white hover:cursor-pointer',
+                'flex flex-col gap-1 p-1 overflow-hidden bg-white hover:cursor-pointer',
                 selectedDate === index + 1 && 'bg-gray-300',
               )}
               onClick={() => {
