@@ -45,11 +45,6 @@ export default function ScheduleEditButton({ schedule }: { schedule: Schedule })
 
   const { mutate } = useUpdateSchedule();
   const handleEditSchedule = (data: ScheduleFormValues) => {
-    if (!date) {
-      alert('알맞은 date값이 아닙니다.');
-      return;
-    }
-
     const updateData = {
       scheduleId: schedule.id,
       title: data.title,
