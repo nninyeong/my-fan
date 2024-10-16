@@ -3,6 +3,7 @@ import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import ScheduleList from '@/components/calendar/ScheduleList';
 import getInitialSchedules from '@/queries/getInitialSchedules';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { createClient } from '@/utils/supabase/server';
 
 export default async function page({ params }: { params: { id: string } }) {
   const artistId = params.id;
@@ -14,27 +15,35 @@ export default async function page({ params }: { params: { id: string } }) {
   const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
   const endDate = `${year}-${String(month).padStart(2, '0')}-${daysInMonth}}`;
 
-  // const initialSchedules = await getInitialSchedules(artistId, startDate, endDate);
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['schedules', artistId],
+    queryKey: ['schedules', artistId, year, month],
     queryFn: () => getInitialSchedules(artistId, startDate, endDate),
   });
+
+  // TODO: 유나님이 zustand에 session 정보 통합해주시면 그 데이터로 변경
+  const client = createClient();
+  const { data: sessionData, error } = await client.auth.getSession();
+
+  if (error) throw new Error(error.message);
+  console.log('userId: ', sessionData.session?.user.id);
+  const userId = sessionData.session?.user.id;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className='flex justify-center items-center gap-10 w-full mt-14'>
-        <div className='border w-[900px] h-[600px]'>
-          {/*TODO: artist params id로 동적 라우팅된다면 id -> 아티스트 이름을 알 수 있는지 확인 필요, 안된다면 메인에서 넘어올 때 zustand 이용?*/}
-          <h3>{artistId} 스케쥴</h3>
+        <div className='border p-5 w-[900px] h-[650px]'>
+          <h3>{artistId}</h3>
           <Calendar
             initialDate={today}
             artistId={artistId}
+            userId={userId}
           />
         </div>
         <ScheduleList
           initialDate={today}
           artistId={artistId}
+          userId={userId}
         />
       </div>
     </HydrationBoundary>
