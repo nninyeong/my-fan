@@ -20,7 +20,8 @@ export default function Page() {
 
   const { id } = useParams();
 
-  const urlId = decodeURIComponent(id);
+  // id가 문자열일 때만 decodeURIComponent를 호출
+  const urlId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
   useEffect(() => {
     if (id) {
@@ -42,9 +43,10 @@ export default function Page() {
 
       setArtist(data);
 
-      console.log(data);
+      // console.log(data);
 
-      const artistGroup = data?.map((element) => element.group) || [];
+      const artistGroup =
+        data?.map((element) => element.group).filter((group): group is string => group !== null) || [];
       setGroup(artistGroup);
 
       const imageUrls = data?.map((element) => element.image) || [];
@@ -63,7 +65,7 @@ export default function Page() {
       console.error('Unexpected error:', err);
     }
   }
-
+  // console.log(artist);
   // console.log(groups);
   // console.log(images);
 
