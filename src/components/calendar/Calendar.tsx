@@ -34,8 +34,8 @@ export default function Calendar({ initialDate, artistId, userId }: TempClanedar
   };
 
   return (
-    <div className='flex flex-col gap-3 justify-center items-center w-full'>
-      <div className='grid grid-cols-5 w-full'>
+    <div className='flex flex-col justify-center items-center w-full'>
+      <div className='grid grid-cols-5 w-full mb-8'>
         <div className='col-start-2 col-end-5 flex gap-3 justify-center items-center'>
           <CalendarControllBotton
             mode='previous'
@@ -78,19 +78,16 @@ export default function Calendar({ initialDate, artistId, userId }: TempClanedar
               }}
             >
               <div>{index + 1}</div>
-              <div>
+              <div className='flex flex-col gap-1'>
                 {schedules &&
                   schedules.map((schedule) => {
                     if (isSameDay(index + 1, schedule.date)) {
                       return (
                         <div
                           key={schedule.id}
-                          className='flex items-center gap-1 text-[12px]'
+                          className='bg-svt-rosequartz/50 rounded font-bold p-2 text-gray-700 leading-[12px] text-[12px]'
                         >
-                          <div className='w-[5px] h-[5px] shrink-0 rounded-full bg-svt-rosequartz'></div>
-                          <div className='overflow-hidden whitespace-nowrap truncate h-[12px] leading-[12px]'>
-                            {schedule.title}
-                          </div>
+                          {schedule.title}
                         </div>
                       );
                     }
