@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 
 export default function Profile() {
-  const [hydrated, setHydrated] = useState(false);
+  const [hydrated, setHydrated] = useState<boolean>(false);
 
   const { users, isLogin } = useAuthStore((state) => ({
     users: state.users,
