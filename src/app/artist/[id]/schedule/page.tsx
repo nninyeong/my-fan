@@ -3,8 +3,23 @@ import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import ScheduleList from '@/components/calendar/ScheduleList';
 import getInitialSchedules from '@/queries/getInitialSchedules';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { Metadata } from 'next';
 
-export default async function page({ params }: { params: { id: string } }) {
+type Params = {
+  params: { id: string };
+};
+
+export const generateMetadata = async ({ params }: Params): Promise<Metadata> => {
+  const id = params.id;
+  const artist = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
+
+  return {
+    title: `${artist} 스케줄 | My-Fan`,
+    description: `팬들과 함께 ${artist}의 스케줄을 실시간으로 공유할 수 있는 서비스입니다`,
+  };
+};
+
+export default async function page({ params }: Params) {
   const id = params.id;
   const artistId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
