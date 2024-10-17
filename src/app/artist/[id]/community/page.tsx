@@ -51,6 +51,16 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
     getArtist(artistId);
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await getPosts();
+  //     await getArtist(artistId);
+  //   };
+
+  //   if (artistId) {
+  //     fetchData();
+  //   }
+  // }, [artistId]);
   return (
     <div className='flex flex-col justify-start items-center'>
       <div className='mt-[30px] w-[1000px]'>
