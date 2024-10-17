@@ -56,8 +56,6 @@ export default function AuthButton() {
     },
   });
 
-  console.log(signInMutation);
-
   // 로그아웃
   const signOutMutation = useMutation({
     mutationFn: async () => {

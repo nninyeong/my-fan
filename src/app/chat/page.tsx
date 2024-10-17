@@ -8,7 +8,6 @@ import InitUser from '@/lib/stores/InitUser';
 export default async function page() {
   const supabase = createClient();
   const { data } = await supabase.auth.getSession();
-  // console.log(data);
 
   return (
     <>

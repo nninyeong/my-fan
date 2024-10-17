@@ -72,11 +72,7 @@ export default function Comment({ userInfo }: UserInfo) {
     const response = await supabase.from('comments').delete().eq('id', id);
 
     if (response.status === 204) {
-      console.log('삭제성공');
       setComments((prev) => prev.filter((co) => co.id !== id));
-    } else {
-      console.log('에러 코드', response.error?.code);
-      console.log('에러 메시지', response.error?.message);
     }
   };
 

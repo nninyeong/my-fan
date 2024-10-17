@@ -35,8 +35,6 @@ export default function DetailPost({ posts, postId }: PostPropType) {
       setUserInfo(Info);
     }
   };
-  // //SECTION -
-  console.log(userInfo);
 
   // 글 삭제하기
   const handleDelete = async (postId: string) => {

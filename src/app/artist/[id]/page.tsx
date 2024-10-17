@@ -34,8 +34,6 @@ export default function Page() {
     try {
       const { data, error } = await supabase.from('artists').select('*').eq(`group`, groupId); // URL의 id를 사용하여 그룹 조회해야함
 
-      console.log(groupId);
-
       if (error) {
         console.error('Error fetching data:', error);
         return;

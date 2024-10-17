@@ -4,8 +4,6 @@
  * @return 변환된 날짜 (형식 : 2024년 10월 15일 오후 03:49)
  */
 export const formatDate = (createdDate: string): React.ReactNode => {
-  //console.log('createdDate', createdDate);
-
   const dateTime = new Date(createdDate);
   // 한국어 형식으로 날짜 및 시간 포맷
   const formattedDateTime = new Intl.DateTimeFormat('ko-KR', {

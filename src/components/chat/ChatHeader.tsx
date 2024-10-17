@@ -11,11 +11,6 @@ export default function ChatHeader() {
   const [onlineUsers, setOnlineUsers] = useState(0);
 
   useEffect(() => {
-    setIsClient(true);
-    browserClient.auth.getSession().then(console.log);
-  }, []);
-
-  useEffect(() => {
     const channel = supabase.channel('room1');
     channel
       .on('presence', { event: 'sync' }, () => {

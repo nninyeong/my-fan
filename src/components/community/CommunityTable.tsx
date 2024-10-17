@@ -14,8 +14,6 @@ export default function CommunityTable({ posts }: PostPropType) {
   const value = useParams();
   const postId = value.id;
 
-  console.log('posts', posts);
-
   //글 디테일 페이지로 이동
   const movePostDetail = (id: string) => {
     router.push(`/artist/${postId}/community/${id}`);

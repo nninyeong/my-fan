@@ -14,8 +14,6 @@ export default function InitUser({ user }: { user: User | undefined }) {
     }
 
     initState.current = true;
-
-    console.log(user?.user_metadata);
   }, [user, setUser]);
 
   return null;

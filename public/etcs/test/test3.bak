@@ -9,9 +9,6 @@ export default async function ProfilePage() {
     return <div>세션을 가져오는 중 오류가 발생했습니다.</div>;
   }
   const user = data.session?.user;
-  // const userbabe = data.session?.user;
-  console.log(`유저어`, user);
-  console.log(`유저어meta`, user?.user_metadata);
   const meta = user?.user_metadata;
   return (
     <div>

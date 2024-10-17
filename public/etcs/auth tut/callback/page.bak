@@ -37,7 +37,5 @@ export default function AuthCallback() {
     fetchUserSession();
   }, [setUser, setLogin, router]);
 
-  console.log(setUser);
-
   return <div className='flex justify-center items-center min-h-screen'>{<Loading />}</div>;
 }
