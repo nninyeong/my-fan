@@ -3,10 +3,10 @@ import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import ScheduleList from '@/components/calendar/ScheduleList';
 import getInitialSchedules from '@/queries/getInitialSchedules';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { createClient } from '@/utils/supabase/server';
 
 export default async function page({ params }: { params: { id: string } }) {
-  const artistId = params.id;
+  const id = params.id;
+  const artistId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
   const today = new Date();
   const year = getYear(today);
@@ -21,30 +21,14 @@ export default async function page({ params }: { params: { id: string } }) {
     queryFn: () => getInitialSchedules(artistId, startDate, endDate),
   });
 
-  // TODO: 유나님이 zustand에 session 정보 통합해주시면 그 데이터로 변경
-  const client = createClient();
-  const { data: sessionData, error } = await client.auth.getSession();
-
-  if (error) throw new Error(error.message);
-  console.log('userId: ', sessionData.session?.user.id);
-  const userId = sessionData.session?.user.id;
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className='flex justify-center items-center gap-10 w-full mt-14'>
-        <div className='border p-5 w-[900px] h-[650px]'>
-          <h3>{artistId}</h3>
-          <Calendar
-            initialDate={today}
-            artistId={artistId}
-            userId={userId}
-          />
+      <div className='flex justify-center items-start gap-10 w-full mt-14'>
+        <div className='border p-5 w-[900px]'>
+          <h3 className='font-bold'>{artistId} 스케줄</h3>
+          <Calendar artistId={artistId} />
         </div>
-        <ScheduleList
-          initialDate={today}
-          artistId={artistId}
-          userId={userId}
-        />
+        <ScheduleList artistId={artistId} />
       </div>
     </HydrationBoundary>
   );

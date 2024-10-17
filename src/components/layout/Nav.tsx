@@ -60,9 +60,6 @@ export default function Nav() {
     <nav>
       <ul className='flex items-center gap-4'>
         <li>
-          <Link href={'/artist'}>아티스트</Link>
-        </li>
-        <li>
           <Link href={'/chat'}>팬끼리 모여라 톡</Link>
         </li>
         {isLogin ? (

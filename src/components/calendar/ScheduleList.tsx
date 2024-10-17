@@ -1,35 +1,33 @@
 'use client';
 
-import { CalendarInitDataType, Schedule } from '@/lib/type/scheduleTypes';
+import { Schedule } from '@/lib/type/scheduleTypes';
 import { useFetchSchedules } from '@/queries/fetchSchedules';
 import useScheduleStore from '@/lib/stores/useScheduleStore';
 import { isSameDay } from '@/utils/calendar/calendarUtils';
 import ScheduleDeleteButton from '@/components/calendar/ScheduleDeleteButton';
 import ScheduleEditButton from '@/components/calendar/ScheduleEditButton';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
 
-// TODO: 유나님 zustand merge 후 zustand에서 받아오기
-type TempCalendarInitialType = CalendarInitDataType & {
-  userId: string | undefined;
-};
+export default function ScheduleList({ artistId }: { artistId: string }) {
+  const { calendarDate, selectedDate } = useScheduleStore((state) => state);
+  let { data: schedules } = useFetchSchedules(artistId, calendarDate);
 
-export default function ScheduleList({ artistId, initialDate, userId }: TempCalendarInitialType) {
-  let { data: schedules } = useFetchSchedules(artistId, initialDate);
-  const { selectedDate } = useScheduleStore();
+  const { user } = useAuthStore((state) => state);
 
   if (selectedDate && schedules) {
     schedules = schedules.filter((schedule) => isSameDay(selectedDate, schedule.date));
   }
 
   return (
-    <div className='border w-[300px] h-[650px] overflow-auto flex flex-col jusfity-start items-center gap-3 p-3'>
+    <div className='border w-[300px] h-[670px] overflow-auto flex flex-col jusfity-start items-center gap-3 p-3'>
       {schedules && schedules.length > 0 ? (
         schedules.map((schedule: Schedule) => (
           <div
             key={schedule.id}
-            className='relative w-full h-[100px] border p-3'
+            className='relative w-full border p-3'
           >
-            {schedule.user_id === userId && (
-              <div className='absolute right-3 top-3 flex gap-1'>
+            {schedule.user_id === user?.id && (
+              <div className='absolute right-3 bottom-3 flex'>
                 <ScheduleEditButton schedule={schedule} />
                 <ScheduleDeleteButton scheduleId={schedule.id} />
               </div>

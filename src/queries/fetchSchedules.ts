@@ -1,7 +1,6 @@
 import { getDaysInMonth, getMonth, getYear } from 'date-fns';
 import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 import { Schedule, ScheduleInsert, ScheduleUpdate } from '@/lib/type/scheduleTypes';
 
 export const fetchSchedules = async (artistId: string, year: number, month: number) => {

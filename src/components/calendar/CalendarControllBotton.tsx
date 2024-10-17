@@ -3,23 +3,25 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import { add, sub } from 'date-fns';
-import { Dispatch, SetStateAction } from 'react';
+import useScheduleStore from '@/lib/stores/useScheduleStore';
 
 type CalendarControllProps = {
   mode: 'previous' | 'next';
-  calendarDate: Date;
-  setCalendarDate: Dispatch<SetStateAction<Date>>;
 };
 
-export default function CalendarControllBotton({ mode, calendarDate, setCalendarDate }: CalendarControllProps) {
+export default function CalendarControllBotton({ mode }: CalendarControllProps) {
+  const { calendarDate, setCalendarDate, selectDate } = useScheduleStore((state) => state);
+
   const handleControllCalendar = () => {
+    let updatedDate: Date;
     if (mode === 'previous') {
-      const updatedDate = sub(calendarDate, { months: 1 });
-      setCalendarDate(updatedDate);
+      updatedDate = sub(calendarDate, { months: 1 });
     } else {
-      const updatedDate = add(calendarDate, { months: 1 });
-      setCalendarDate(updatedDate);
+      updatedDate = add(calendarDate, { months: 1 });
     }
+
+    setCalendarDate(updatedDate);
+    selectDate(null);
   };
 
   return (
