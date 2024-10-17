@@ -8,6 +8,10 @@ export type CommunityPost = {
   title: string;
   body: string;
   artist_id: string;
+  users: {
+    display_name: string;
+    id: string;
+  };
 };
 
 export type Comments = {
@@ -19,4 +23,8 @@ export type Comments = {
   parent_comment_id: string;
   artist_id: string;
   edit_comment: boolean;
+  users: {
+    display_name: string;
+    id: string;
+  };
 };

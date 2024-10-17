@@ -1,15 +1,6 @@
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 import { useParams, useRouter } from 'next/navigation';
 import { formatDate } from '@/utils/community/communityUtil';
@@ -23,6 +14,8 @@ export default function CommunityTable({ posts }: PostPropType) {
   const value = useParams();
   const postId = value.id;
 
+  console.log('posts', posts);
+
   //글 디테일 페이지로 이동
   const movePostDetail = (id: string) => {
     router.push(`/artist/${postId}/community/${id}`);
@@ -34,7 +27,7 @@ export default function CommunityTable({ posts }: PostPropType) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='text-center w-[100px] '>가수</TableHead>
+              <TableHead className='text-center w-[150px] '>가수</TableHead>
               <TableHead className='text-center w-[150px]'>글쓴이</TableHead>
               <TableHead className='text-center'>제목</TableHead>
               <TableHead className='text-center w-[200px]'>등록일</TableHead>
@@ -49,31 +42,13 @@ export default function CommunityTable({ posts }: PostPropType) {
                 '
               >
                 <TableCell className='font-medium'>{post.artist_id}</TableCell>
-                <TableCell>{post.user_id}</TableCell>
+                <TableCell> {post.users && post.users.display_name ? post.users.display_name : '이름 없음'}</TableCell>
                 <TableCell>{post.title}</TableCell>
                 <TableCell className='text-right'>{formatDate(post.created_at)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </div>
-      <div className='my-4'>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href='#' />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
       </div>
     </div>
   );

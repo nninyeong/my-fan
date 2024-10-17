@@ -3,43 +3,71 @@
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
-import seventeen from '../../../../../public/images/seventeen.png';
-import Image from 'next/image';
 import CommunityTable from '@/components/community/CommunityTable';
-import { useParams } from 'next/navigation';
-// http://localhost:3000/artist/2/community
+import Link from 'next/link';
 
-export default function CommunityPage() {
+export default function CommunityPage({ params }: { params: { id: string } }) {
+  const id = params.id;
+  const artistId = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
+
   const [posts, setPosts] = useState<CommunityPost[]>([]);
+  const [artist, setArtist] = useState<string>('');
   const supabase = createClient();
-  const value = useParams();
-  const artistId = value.id;
 
   //해당 아티스트 글 가져오기
   const getPosts = async () => {
     const { data } = await supabase
       .from('posts')
-      .select('*')
+      .select(
+        `
+        *,
+        users (
+          id,
+          display_name
+        )
+      `,
+      )
       .eq('artist_id', artistId)
-      .order('created_at', { ascending: false })
-      .returns<CommunityPost[]>();
+      .order('created_at', { ascending: false });
     setPosts(data || []);
+  };
+
+  //아티스트 정보 가져오기
+  const getArtist = async (artistId: string) => {
+    const { data, error } = await supabase.from('artists').select('*').eq(`group`, artistId);
+
+    if (error) {
+      console.error('Error fetching data:', error);
+      return;
+    }
+
+    const artistUrl = data[0].image;
+    setArtist(artistUrl);
   };
 
   useEffect(() => {
     getPosts();
+    getArtist(artistId);
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await getPosts();
+  //     await getArtist(artistId);
+  //   };
+
+  //   if (artistId) {
+  //     fetchData();
+  //   }
+  // }, [artistId]);
   return (
     <div className='flex flex-col justify-start items-center'>
       <div className='mt-[30px] w-[1000px]'>
         <div className='mb-8'>
-          {/* //TODO - 임시로 놓은 사진 (해당 가수 사진 가져와야함) */}
-          <Image
+          <img
+            src={artist}
             alt='seventeen'
-            src={seventeen}
             width={300}
             height={300}
             className='mb-[10px] '
