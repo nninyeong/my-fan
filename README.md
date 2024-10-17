@@ -15,7 +15,7 @@
 
 - 프로젝트 명 : My Fan
 - 프로젝트 소개 : 좋아하는 아티스트의 커뮤니티를 생성/탐색하여 같은 주제로 이야기를 나누거나,아티스트의 일정을 공유하는 등의 활동을 할 수 있는 웹 사이트
-- 배포 링크 :
+- 배포 링크 : https://my-fan.vercel.app/
 - github 링크 : https://github.com/nninyeong/my-fan.git
 - 개발 기간
   | 구분 | 기간 | 활동 | 비고 |
@@ -81,9 +81,19 @@
 
 ## 🖥 [와이어 프레임](#-목차)
 
-## 💻 [기능](#-목차)
+|                                                                                                                                                                                                                                                                      |                                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300212750647369/image.png?ex=6711c926&is=671077a6&hm=d73ed9fb2f5656fadbc6e41a9d26751cb4091e9e1de9e3b644335aea22852af0&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> | <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300213178470481/image.png?ex=6711c926&is=671077a6&hm=b0ed5e7784f04c98ef2a4feddf37dd222ddfbb7bfa765a48d1b4f01984229c93&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> |
+| <center>로그인 페이지                                                                                                                                                                                                                                                | <center>로그아웃 페이지                                                                                                                                                                                                                                              |
+| <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300210569613323/image.png?ex=6711c926&is=671077a6&hm=d6b969f6cccc5b19432468a1cfa121c04fab239bcb08c09b1021afc10e6053fc&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> | <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300211093766195/image.png?ex=6711c926&is=671077a6&hm=14bdd415e99d8667a218532d369476f8f01318a7acea3964fae65f6ba4d7b7c7&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> |
+| <center>메인 검색 페이지                                                                                                                                                                                                                                             | <center>아티스트 페이지                                                                                                                                                                                                                                              |
+| <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300211626315866/image.png?ex=6711c926&is=671077a6&hm=ce1e17f01b7e33d923a3e1493862a482b4eab4aaecb35ab950f8dd6543e44fcc&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> | <img src="" width="250">                                                                                                                                                                                                                                             |
+| <center>스케쥴 페이지                                                                                                                                                                                                                                                | <center>자유게시판 페이지                                                                                                                                                                                                                                            |
+| <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300212394004611/image.png?ex=6711c926&is=671077a6&hm=e4a9498ee052d5054eea25b367788e1b309226d01ba5f28d466ba0a6ec784df3&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> | <img src="https://media.discordapp.net/attachments/1244516648866680885/1296300212058456105/image.png?ex=6711c926&is=671077a6&hm=513eb6210d19d166d901eb45cfa587291093165f5fd44952a060cd3cb792e93f&=&format=webp&quality=lossless&width=2160&height=1038" width="250"> |
+| <center>채팅 페이지                                                                                                                                                                                                                                                  | <center>마이 페이지                                                                                                                                                                                                                                                  |
+|                                                                                                                                                                                                                                                                      |
 
-## 🖥 [CODE](#-목차)
+## 💻 [기능](#-목차)
 
 ## 💣 [트러블슈팅](#-목차)
 
@@ -170,9 +180,14 @@ const itemsPerView = 7; // 한 번에 보이는 이미지 수
 <summary>김민영</summary>
 
 - 프로젝트 결과물에 대한 완성도 평가
+  (8점) 전체적으로 필요한 기능들을 잘 구현했지만 예외상황에대한 대응이 조금 부족했던 것 같다
 - 잘 한 부분과 아쉬운 점
+  (잘 한 부분) 일정관리를 유동적으로 잘 했다
+  (아쉬운 부분) 더 적극적으로 일을 나눠서 계획한 내용을 모두 완수할 수 있었으면 좋았을 것 같다!
 - 느낀점
+  next를 이용한 첫 팀 프로젝트였다. 개인 프로젝트때보다 이해도가 올라간 것 같지만 사용하는 도구를 얼마나 이해하고 활용하는 건지 중요하다고 생각이 들었다. 타입스크립트와 next.js를 더 공부해서 잘 활용하고 싶다!
 - 개선해야 할 점
+프로젝트에 반응형 ui를 적용하고 예외처리를 좀 더 추가하고 싶다!
 </details>
 
 <details>
