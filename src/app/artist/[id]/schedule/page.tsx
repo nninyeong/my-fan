@@ -14,7 +14,7 @@ export const generateMetadata = async ({ params }: Params): Promise<Metadata> =>
   const artist = Array.isArray(id) ? id[0] : id ? decodeURIComponent(id) : '';
 
   return {
-    title: `${artist} 스케줄`,
+    title: `${artist} 스케줄 | My-Fan`,
     description: `팬들과 함께 ${artist}의 스케줄을 실시간으로 공유할 수 있는 서비스입니다`,
   };
 };
