@@ -11,7 +11,7 @@ import { ArrowDown } from 'lucide-react';
 
 export default function ListMessages() {
   const scrollRef = useRef<HTMLDivElement>(null); // 스크롤 위치 추적
-  const [userScrolled, setUserScrolled] = useState(false);
+  const [userScrolled, setUserScrolled] = useState<boolean>(false);
   const { messages, addMessage, optimisticIds, optimisticDeleteMessage, optimisticUpdateMessage } = useMessage();
 
   // Supabase 구독 설정
@@ -23,6 +23,7 @@ export default function ListMessages() {
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
         if (!optimisticIds.includes(payload.new.id)) {
           const { data, error } = await supabase.from('users').select('*').eq('id', payload.new.send_by).single();
+
           if (error) {
             toast.error(error.message);
           } else {

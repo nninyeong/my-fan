@@ -3,11 +3,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'avatars.githubusercontent.com',
         protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sqeuibzetolbikvgjolr.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/avatars/**',
       },
     ],
-    domains: ['zjzxtdplbzlpmnvdrlbu.supabase.co'],
   },
   typescript: {
     ignoreBuildErrors: true,
