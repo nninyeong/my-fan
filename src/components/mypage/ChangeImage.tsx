@@ -67,23 +67,12 @@ export default function ChangeImage({ defaultAvatarUrl }: ChangeImageProps) {
     }
   };
 
-  console.log('avatarUrl:', avatarUrl);
-  console.log('defaultImg:', defaultImg);
-
   return (
     <div className='flex justify-center items-center space-x-4'>
       <div
         className='w-44 h-44 rounded-full overflow-hidden relative cursor-pointer'
         onClick={handleImageClick}
       >
-        {/* <Image
-          src={avatarUrl || defaultImg}
-          alt='User Avatar'
-          className='w-full h-full object-cover'
-          width={176}
-          height={176}
-          unoptimized
-        /> */}
         {avatarUrl ? (
           <img
             src={avatarUrl || defaultImg}
@@ -91,7 +80,11 @@ export default function ChangeImage({ defaultAvatarUrl }: ChangeImageProps) {
             className='w-full h-full object-cover'
           />
         ) : (
-          <div>Loading...</div>
+          <img
+            src={defaultImg}
+            alt='User Avatar'
+            className='w-full h-full object-cover'
+          />
         )}
       </div>
 

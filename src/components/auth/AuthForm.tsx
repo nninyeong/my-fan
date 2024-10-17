@@ -57,8 +57,6 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
 
   // 회원가입/ 로그인 로직
   const onSubmit = async (formData: SignUpFormData | LoginFormData) => {
-    console.log('formData:', formData);
-
     if (mode === 'signUp') {
       const signUpData = formData as SignUpFormData;
       const { email, password, username } = signUpData;
@@ -79,7 +77,6 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
         console.error('회원가입 오류:', error.message);
         toast.error(error.message);
       } else {
-        console.log('회원가입 성공:', data);
         toast.success('회원가입 성공');
         router.push('/signIn');
       }
@@ -89,19 +86,6 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
         email,
         password,
       });
-
-      // if (error) {
-      //   console.error('로그인 오류:', error.message);
-      //   toast.error(error.message);
-      // } else {
-      //   toast.success('로그인 성공');
-      //   setLogin(true);
-      //   router.push('/');
-
-      //   if (data.user) {
-      //     setUser(data.user);
-      //   }
-      // }
 
       if (error) {
         console.error('로그인 오류:', error.message);
