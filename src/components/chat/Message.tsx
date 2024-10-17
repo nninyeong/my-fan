@@ -1,4 +1,4 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import MessageMenu from './MessageMenu';
 import { Imessage } from '@/lib/stores/useMessagesStore';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
@@ -10,12 +10,11 @@ export default function Message({ message }: { message: Imessage }) {
   return (
     <div className='flex gap-2'>
       <div className='h-10 w-10 bg-green-500 rounded-full overflow-hidden'>
-        <Image
+        <img
           src={message.users?.avatar_url!}
-          alt={message.users?.display_name || username || ''}
-          width={40}
-          height={40}
-          className='rounded-full ring-2'
+          alt={message.users?.display_name!}
+          // alt={message.users?.display_name || username || ''}
+          className='w-full h-full rounded-full ring-2 object-cover'
         />
       </div>
 

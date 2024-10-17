@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChangeUserInfo } from '@/components/mypage/ChangeUserInfo';
 import ChangeImage from '@/components/mypage/ChangeImage';
-import { UserInfo } from '@/components/mypage/UserInfo';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import Loading from './loading';
 
@@ -40,7 +39,7 @@ export default function Page() {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 py-24 gap-6 items-center m-auto container'>
+    <div className='grid py-24 gap-6 m-auto container'>
       <Card className='min-w-[450px] m-auto'>
         <CardHeader>
           <CardTitle>회원정보</CardTitle>
@@ -56,10 +55,10 @@ export default function Page() {
         </CardContent>
       </Card>
 
-      <UserInfo
+      {/* <UserInfo
         email={user?.email}
         metadata={user?.user_metadata}
-      />
+      /> */}
     </div>
   );
 }

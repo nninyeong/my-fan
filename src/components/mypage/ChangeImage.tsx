@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+'use client';
+
 import { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '@/lib/stores/useAuthStore';
 import { uploadAvatar, updateAvatarUrl } from '@/utils/mypage/uploadUtil';
@@ -6,7 +7,6 @@ import { toast } from 'sonner';
 import { AVATAR_URL } from '@/lib/constants/constants';
 import browserClient from '@/utils/supabase/client';
 import { User as SupabaseUser } from '@supabase/supabase-js';
-import Image from 'next/image';
 
 interface UserMetadata {
   display_name?: string;
@@ -14,6 +14,7 @@ interface UserMetadata {
   avatar_url?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface User extends SupabaseUser {
   user_metadata: UserMetadata;
 }
@@ -53,7 +54,7 @@ export default function ChangeImage({ defaultAvatarUrl }: ChangeImageProps) {
         setUser({
           ...user,
           user_metadata: {
-            ...user.user_metadata,
+            ...user?.user_metadata,
             avatar_url: newAvatarUrl,
           },
         });
@@ -66,19 +67,32 @@ export default function ChangeImage({ defaultAvatarUrl }: ChangeImageProps) {
     }
   };
 
+  console.log('avatarUrl:', avatarUrl);
+  console.log('defaultImg:', defaultImg);
+
   return (
     <div className='flex justify-center items-center space-x-4'>
       <div
         className='w-44 h-44 rounded-full overflow-hidden relative cursor-pointer'
         onClick={handleImageClick}
       >
-        <Image
+        {/* <Image
           src={avatarUrl || defaultImg}
           alt='User Avatar'
           className='w-full h-full object-cover'
           width={176}
           height={176}
-        />
+          unoptimized
+        /> */}
+        {avatarUrl ? (
+          <img
+            src={avatarUrl || defaultImg}
+            alt='User Avatar'
+            className='w-full h-full object-cover'
+          />
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
 
       {/* 파일 입력 요소 (숨김 처리) */}

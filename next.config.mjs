@@ -3,8 +3,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'avatars.githubusercontent.com',
         protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
       },
       {
         protocol: 'https',
@@ -13,7 +13,6 @@ const nextConfig = {
         pathname: '/storage/v1/object/public/avatars/**',
       },
     ],
-    domains: ['sqeuibzetolbikvgjolr.supabase.co'],
   },
 };
 
