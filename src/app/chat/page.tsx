@@ -8,10 +8,11 @@ import InitUser from '@/lib/stores/InitUser';
 export default async function page() {
   const supabase = createClient();
   const { data } = await supabase.auth.getSession();
-  console.log(data);
+  // console.log(data);
+
   return (
-    <div className='grid gap-4'>
-      <div className='w-full mx-auto md:py-10 md:px-4 h-screen'>
+    <>
+      <div className='max-w-3xl mx-auto md:py-10 md:px-4 h-screen'>
         <div className='h-full border rounded-md flex flex-col relative'>
           <ChatHeader />
 
@@ -26,6 +27,6 @@ export default async function page() {
         </div>
       </div>
       <InitUser user={data.session?.user} />
-    </div>
+    </>
   );
 }

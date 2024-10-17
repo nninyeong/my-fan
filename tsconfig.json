@@ -28,7 +28,22 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/chat/AuthButton.bak",
-    "src/components/auth/AuthForm1.bak"
+    "src/components/auth/AuthForm1.bak",
+    "public/etcs/signup/signup.bak",
+    "public/etcs/page.bak",
+    "public/etcs/auth/confirm/route.bak",
+    "public/etcs/auth/callback/route.bak",
+    "public/etcs/auth/callback/page.bak",
+    "public/etcs/login/login.bak",
+    "public/etcs/signup/page.bak",
+    "public/etcs/test/test.bak",
+    "public/etcs/auth tut/callback/route.bak",
+    "public/etcs/login/page.bak",
+    "public/etcs/test/test3.bak",
+    "src/app/mypage/page.tsx",
+    "src/app/mypage/loading.tsx",
+    "src/components/mypage/UserInfo.bak",
+    "src/components/mypage/ChangeImage.tsx"
   ],
   "exclude": ["node_modules"]
 }

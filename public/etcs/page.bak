@@ -3,8 +3,8 @@ import { Input } from '@/components/ui/input';
 import { CardDemo } from '@/components/shared/CardDemo';
 import { CarouselDemo } from '@/components/shared/CarouselDemo';
 import { DialogDemo } from '@/components/shared/DialogDemo';
-import UsersPage from '@/components/test/test';
-import ProfilePage from '@/components/test/test3';
+import UsersPage from './test/test.bak';
+import ProfilePage from './test/test3.bak';
 import { createClient } from '@/utils/supabase/server';
 import ProfileClient from '@/components/auth/serverAuth';
 

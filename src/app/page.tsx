@@ -1,9 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
 import Link from 'next/link';
+import { Group } from 'lucide-react';
 
 type Group = {
   id: string;
@@ -18,11 +19,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
   const fetchArtistList = async () => {
-    if (artistName.trim() === '') {
-      alert('찾고싶은 아티스트명을 입력해주세요!');
-      return; // 이름이 비어 있으면 실행 안 함
-    }
-
     setIsLoading(true);
     try {
       const response = await axios.get(`/api/artist`, {
@@ -35,6 +31,10 @@ export default function Home() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchArtistList();
+  }, []);
 
   return (
     <section className='grid justify-items-center min-h-screen py-8 pb-20 m-auto container'>

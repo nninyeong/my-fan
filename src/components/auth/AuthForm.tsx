@@ -57,8 +57,6 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
 
   // 회원가입/ 로그인 로직
   const onSubmit = async (formData: SignUpFormData | LoginFormData) => {
-    console.log('formData:', formData);
-
     if (mode === 'signUp') {
       const signUpData = formData as SignUpFormData;
       const { email, password, username } = signUpData;
@@ -79,13 +77,12 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
         console.error('회원가입 오류:', error.message);
         toast.error(error.message);
       } else {
-        console.log('회원가입 성공:', data);
         toast.success('회원가입 성공');
         router.push('/signIn');
       }
     } else {
       const { email, password } = formData as LoginFormData;
-      const { data, error } = await browserClient.auth.signInWithPassword({
+      const { error } = await browserClient.auth.signInWithPassword({
         email,
         password,
       });
@@ -96,10 +93,16 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
       } else {
         toast.success('로그인 성공');
         setLogin(true);
-        router.push('/');
 
-        if (data.user) {
-          setUser(data.user);
+        await browserClient.auth.refreshSession();
+        const { data: userData, error: userError } = await browserClient.auth.getUser();
+
+        if (userError || !userData) {
+          console.error('사용자 데이터 가져오기 오류:', userError?.message);
+          toast.error('사용자 데이터를 불러오는 중 오류가 발생했습니다.');
+        } else {
+          setUser(userData.user);
+          router.push('/');
         }
       }
     }
@@ -112,7 +115,8 @@ export default function AuthForm({ mode }: { mode: 'signUp' | 'signIn' }) {
       options: { redirectTo: window.origin + '/auth/callback' },
     });
   }
-
+  // 세션 받고 인가코드 받거나 하는 거 없어?
+  //
   useEffect(() => {
     browserClient.auth.getSession().then(console.log);
   }, []);
