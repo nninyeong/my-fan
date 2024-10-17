@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { CommunityPost } from '@/lib/type/CommunityTypes';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Label } from '../ui/label';
+import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/lib/stores/useAuthStore';
+import { UserInfo } from './PostForm';
 
 type PostPropType = {
   posts: CommunityPost;
@@ -14,9 +17,27 @@ type PostPropType = {
 export default function DetailPost({ posts, postId }: PostPropType) {
   const supabase = createClient();
   const router = useRouter();
-  // const createdDate = formatDate(posts.created_at);
 
-  //TODO - 내가 쓴 글만 삭제해야함
+  // //SECTION -
+  const [userInfo, setUserInfo] = useState<UserInfo[] | null>([]);
+  const { user } = useAuthStore();
+  const userId = user?.id;
+
+  //로그인 한 사용자 정보 가져오기(깃허브X)
+  const fetchUserInfo = async () => {
+    const { data, error } = await supabase.from('users').select(`*`).eq('id', userId!);
+    if (error) {
+      console.error('Error fetching user info:', error);
+      return;
+    }
+    if (data && data.length > 0) {
+      const Info = data[0];
+      setUserInfo(Info);
+    }
+  };
+  // //SECTION -
+  console.log(userInfo);
+
   // 글 삭제하기
   const handleDelete = async (postId: string) => {
     const confirmed = window.confirm('정말로 이 게시글을 삭제하시겠습니까?');
@@ -39,13 +60,17 @@ export default function DetailPost({ posts, postId }: PostPropType) {
     router.push(`/artist/${posts.artist_id}/posts?postId=${postId}`);
   };
 
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
   return (
     <>
       <Card className='w-[700px]'>
         <CardHeader className='pt-10'>
           <CardTitle>{posts.title}</CardTitle>
           <CardDescription>
-            <Label className='mr-2'>{posts.user_id}</Label>
+            <Label className='mr-2'>{posts.users.display_name}</Label>
             <Label></Label>
           </CardDescription>
         </CardHeader>
@@ -59,19 +84,24 @@ export default function DetailPost({ posts, postId }: PostPropType) {
           </form>
         </CardContent>
         <CardFooter className='flex justify-between'>
-          {/* //TODO - 해당 유저가 쓴글일경우 버튼보이게 */}
-          <Button
-            variant='outline'
-            onClick={handleUpdate}
-          >
-            수정
-          </Button>
-          <Button
-            variant='destructive'
-            onClick={() => handleDelete(postId)}
-          >
-            삭제
-          </Button>
+          {userInfo.id === posts.user_id ? (
+            <>
+              <Button
+                variant='outline'
+                onClick={handleUpdate}
+              >
+                수정
+              </Button>
+              <Button
+                variant='destructive'
+                onClick={() => handleDelete(postId)}
+              >
+                삭제
+              </Button>
+            </>
+          ) : (
+            <div></div>
+          )}
         </CardFooter>
       </Card>
     </>
